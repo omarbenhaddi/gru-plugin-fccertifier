@@ -1,0 +1,16 @@
+<script src="js/plugins/fccertifier/ajax.js"></script>
+
+<div id="modal-content">
+    <form id="validation_form" >
+        <h1>#i18n{module.identitystore.fccertifier.home.pageTitle}</h1>
+        <p>
+            #i18n{module.identitystore.fccertifier.validation_code.message}
+        </p>
+        <@messages errors=errors />
+        #i18n{module.identitystore.fccertifier.validation_code.labelCode} :
+        <input type="text" id="validation_code" name="validation_code">
+        <a  class="btn btn-primary" onclick="validateCode()">
+            #i18n{module.identitystore.fccertifier.validation_code.buttonSubmit}
+        </a>
+    </form>
+</div>

@@ -1,0 +1,49 @@
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+
+        <form action="jsp/site/Portal.jsp" method="post" >
+            <input type="hidden" name="page" value="fccertifier" >
+            <input type="hidden" name="action" value="certify" >
+            <h1>Confirmation des donn&eacute;es</h1>
+
+            <@messages errors=errors />
+
+            Voulez-vous remplacer et compl&eacute;ter les informations de votre profil 
+            <#if identity?? && identity.attributes??>
+            <ul>
+                <li>Nom de naissance : $ {identity.attributes.family_name.value!''}</li>
+                <li>Date de naissance : $ {identity.attributes.birthdate.value!''}</li>
+                <li>Lieu de naissance : $ {identity.attributes.birthplace.value!''}</li>
+            </ul>
+            <#else>
+                Identity is null
+            </#if>
+            <p>par ces informations certifi&eacute;es par FranceConnect ?</p>
+            <ul>
+                <li>Civilit&eacute; : 
+                    <#switch fc_infos.idsGender >
+                        <#case "1"> Monsieur
+                        <#break>
+                        <#case "2"> Madame
+                        <#break>
+                        <#default> Non définie
+                    </#switch>
+                    [${fc_infos.gender!''}]
+                </li>
+                <li>Liste des pr&eacute;noms : ${fc_infos.givenName!''}</li>
+                <li>Nom de naissance : ${fc_infos.familyName!''}</li>
+                <li>Date de naissance : ${fc_infos.idsBirthDate!''} [${fc_infos.birthDate!''}]</li>
+                <li>Lieu de naissance : ${fc_infos.idsBirthPlace!''} [${fc_infos.birthPlace!''}]</li>
+                <li>Pays de naissance : ${fc_infos.idsBirthCountry!''} [${fc_infos.birthCountry!''}]</li>
+            </ul>
+            <br>
+            <button class="btn btn-primary" type="submit">
+                Confirmer la mise &agrave; jour
+            </button>
+            <a class="btn btn-default" href="jsp/site/Portal.jsp?page=mydashboardIdentity&view=viewIdentity" role="button">
+                Annuler
+            </a>
+
+        </form>
+    </div>
+</div>

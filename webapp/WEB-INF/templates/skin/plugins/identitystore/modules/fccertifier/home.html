@@ -1,0 +1,26 @@
+
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+
+        <form action="jsp/site/Portal.jsp" method="post" >
+            <input type="hidden" name="page" value="fccertifier" >
+            <input type="hidden" name="action" value="fetch" >
+            <h1>#i18n{fccertifier.home.pageTitle}</h1>
+
+            <@messages errors=errors />
+
+            <img src="images/skin/plugins/fccertifier/franceconnect.png" class="img-responsive" />
+            <br>
+            #i18n{fccertifier.home.labelExplaination} 
+            <br>
+            <br>
+            <button class="btn btn-primary" type="submit">
+                #i18n{fccertifier.home.buttonSubmit}
+            </button>
+            <a class="btn btn-default" href="jsp/site/Portal.jsp?page=mydashboardIdentity&view=viewIdentity" role="button">
+                Annuler
+            </a>
+
+        </form>
+    </div>
+</div>
