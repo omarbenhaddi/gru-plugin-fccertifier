@@ -34,7 +34,6 @@
 
 package fr.paris.lutece.plugins.fccertifier.service;
 
-
 import fr.paris.lutece.plugins.fccertifier.business.FcIdentity;
 import fr.paris.lutece.plugins.franceconnect.oidc.UserInfo;
 import fr.paris.lutece.plugins.identitystore.web.rs.dto.AttributeDto;
@@ -44,14 +43,14 @@ import fr.paris.lutece.plugins.identitystore.web.rs.dto.IdentityDto;
 import fr.paris.lutece.plugins.identitystore.web.service.IdentityService;
 
 /*
-import fr.paris.lutece.plugins.identitystore.business.AttributeCertificate;
-import fr.paris.lutece.plugins.identitystore.business.AttributeCertifier;
-import fr.paris.lutece.plugins.identitystore.business.AttributeCertifierHome;
-import fr.paris.lutece.plugins.identitystore.business.Identity;
-import fr.paris.lutece.plugins.identitystore.business.IdentityHome;
-import fr.paris.lutece.plugins.identitystore.service.ChangeAuthor;
-import fr.paris.lutece.plugins.identitystore.service.IdentityStoreService;
-*/
+ import fr.paris.lutece.plugins.identitystore.business.AttributeCertificate;
+ import fr.paris.lutece.plugins.identitystore.business.AttributeCertifier;
+ import fr.paris.lutece.plugins.identitystore.business.AttributeCertifierHome;
+ import fr.paris.lutece.plugins.identitystore.business.Identity;
+ import fr.paris.lutece.plugins.identitystore.business.IdentityHome;
+ import fr.paris.lutece.plugins.identitystore.service.ChangeAuthor;
+ import fr.paris.lutece.plugins.identitystore.service.IdentityStoreService;
+ */
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.portal.service.security.UserNotSignedException;
@@ -64,7 +63,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 
 /**
  * FranceConnect Certifier Service
@@ -82,69 +80,63 @@ public class CertifierService
     private static final String DEFAULT_CONNECTION_ID = "1";
     private static final String DEFAULT_EMAIL = "test@test.fr";
     private static final int DEFAULT_EXPIRES_DELAY = 5;
-    private static final String MOCKED_USER_CONNECTION_ID = AppPropertiesService.getProperty( PROPERTY_MOCKED_CONNECTION_ID,
-            DEFAULT_CONNECTION_ID );
-    private static final String MOCKED_USER_EMAIL = AppPropertiesService.getProperty( PROPERTY_MOCKED_EMAIL,
-            DEFAULT_EMAIL );
-    private static final int EXPIRES_DELAY = AppPropertiesService.getPropertyInt( PROPERTY_EXPIRES_DELAY,
-            DEFAULT_EXPIRES_DELAY );
+    private static final String MOCKED_USER_CONNECTION_ID = AppPropertiesService.getProperty( PROPERTY_MOCKED_CONNECTION_ID, DEFAULT_CONNECTION_ID );
+    private static final String MOCKED_USER_EMAIL = AppPropertiesService.getProperty( PROPERTY_MOCKED_EMAIL, DEFAULT_EMAIL );
+    private static final int EXPIRES_DELAY = AppPropertiesService.getPropertyInt( PROPERTY_EXPIRES_DELAY, DEFAULT_EXPIRES_DELAY );
     private static final String BEAN_IDENTITYSTORE_SERVICE = "fccertifier.identitystore.service";
     private static final String PROPERTY_IDENTITY_SERVICE_CLIENT_CODE = "fccertifier.identitystore.client.code";
     private static final String CERTIFIER_CODE = "fccertifier";
     private static final String CLIENT_CODE = AppPropertiesService.getProperty( PROPERTY_IDENTITY_SERVICE_CLIENT_CODE );
 
-    
-    private static Map<String, ValidationInfos> _mapValidationInfos = new HashMap<String, ValidationInfos>(  );
-    
+    private static Map<String, ValidationInfos> _mapValidationInfos = new HashMap<String, ValidationInfos>( );
 
     /**
      * constructor
      */
-    public CertifierService(  )
+    public CertifierService( )
     {
-        super(  );
+        super( );
     }
 
     /**
      * Starts the validation process by generating and sending a validation code
      *
      * @param request
-     *          The HTTP request
+     *            The HTTP request
      * @throws fr.paris.lutece.portal.service.security.UserNotSignedException
-     *           if no user found
+     *             if no user found
      */
-    public void startValidation( HttpServletRequest request )
-        throws UserNotSignedException
+    public void startValidation( HttpServletRequest request ) throws UserNotSignedException
     {
 
         HttpSession session = request.getSession( true );
-        ValidationInfos infos = new ValidationInfos(  );
-        infos.setExpiresTime( getExpiresTime(  ) );
+        ValidationInfos infos = new ValidationInfos( );
+        infos.setExpiresTime( getExpiresTime( ) );
         infos.setUserConnectionId( getUserConnectionId( request ) );
         infos.setUserEmail( getUserEmail( request ) );
 
-        _mapValidationInfos.put( session.getId(  ), infos );
+        _mapValidationInfos.put( session.getId( ), infos );
     }
 
     /**
      * Validate a validation code
      *
      * @param request
-     *          The request
+     *            The request
      * @param userInfo
-     *          UserInfo from FranceConnect
+     *            UserInfo from FranceConnect
      * @return A validation result
      */
     public ValidationResult validate( HttpServletRequest request, UserInfo userInfo )
     {
-        HttpSession session = request.getSession(  );
+        HttpSession session = request.getSession( );
 
         if ( session == null )
         {
             return ValidationResult.SESSION_EXPIRED;
         }
 
-        String strKey = session.getId(  );
+        String strKey = session.getId( );
         ValidationInfos infos = _mapValidationInfos.get( strKey );
 
         if ( infos == null )
@@ -153,9 +145,9 @@ public class CertifierService
         }
 
         _mapValidationInfos.remove( strKey );
-        
-        infos.setFCUserInfo( new FcIdentity( userInfo ));
-        
+
+        infos.setFCUserInfo( new FcIdentity( userInfo ) );
+
         certify( infos );
 
         return ValidationResult.OK;
@@ -164,74 +156,72 @@ public class CertifierService
     private void certify( ValidationInfos infos )
     {
         IdentityService identityService = SpringContextService.getBean( BEAN_IDENTITYSTORE_SERVICE );
-        
-        IdentityChangeDto  identityChange = new IdentityChangeDto();
-        IdentityDto identity = new IdentityDto();
-        
-        identity.setConnectionId( infos.getUserConnectionId() );
-        Map<String, AttributeDto> mapAttributes = new HashMap<>();
-        FcIdentity user = infos.getFCUserInfo();
-        addAttribute( mapAttributes, "birthdate", user.getIdsBirthDate() );
-        addAttribute( mapAttributes, "fc_birthdate", user.getBirthDate() );
-        addAttribute( mapAttributes, "birthplace", user.getIdsBirthPlace() );
-        addAttribute( mapAttributes, "fc_birthplace", user.getBirthPlace() );
-        addAttribute( mapAttributes, "birthcountry", user.getIdsBirthCountry() );
-        addAttribute( mapAttributes, "fc_birthcountry", user.getBirthCountry() );
-        addAttribute( mapAttributes, "gender", user.getIdsGender() );
-        addAttribute( mapAttributes, "fc_gender", user.getGender() );
-        addAttribute( mapAttributes, "fc_given_name", user.getGivenName() );
-        addAttribute( mapAttributes, "family_name", user.getGivenName() );
-        addAttribute( mapAttributes, "fc_family_name", user.getGivenName() );
-        
+
+        IdentityChangeDto identityChange = new IdentityChangeDto( );
+        IdentityDto identity = new IdentityDto( );
+
+        identity.setConnectionId( infos.getUserConnectionId( ) );
+        Map<String, AttributeDto> mapAttributes = new HashMap<>( );
+        FcIdentity user = infos.getFCUserInfo( );
+        addAttribute( mapAttributes, "birthdate", user.getIdsBirthDate( ) );
+        addAttribute( mapAttributes, "fc_birthdate", user.getBirthDate( ) );
+        addAttribute( mapAttributes, "birthplace", user.getIdsBirthPlace( ) );
+        addAttribute( mapAttributes, "fc_birthplace", user.getBirthPlace( ) );
+        addAttribute( mapAttributes, "birthcountry", user.getIdsBirthCountry( ) );
+        addAttribute( mapAttributes, "fc_birthcountry", user.getBirthCountry( ) );
+        addAttribute( mapAttributes, "gender", user.getIdsGender( ) );
+        addAttribute( mapAttributes, "fc_gender", user.getGender( ) );
+        addAttribute( mapAttributes, "fc_given_name", user.getGivenName( ) );
+        addAttribute( mapAttributes, "family_name", user.getGivenName( ) );
+        addAttribute( mapAttributes, "fc_family_name", user.getGivenName( ) );
+
         identity.setAttributes( mapAttributes );
         identityChange.setIdentity( identity );
-        
-        AuthorDto author = new AuthorDto();
+
+        AuthorDto author = new AuthorDto( );
         author.setApplicationCode( CLIENT_CODE );
         identityChange.setAuthor( author );
-        
-        identityService.certifyAttributes( identityChange , CERTIFIER_CODE );
-    }
-    
-    private void addAttribute( Map<String, AttributeDto> map , String strKey , String strValue )
-    {
-        AttributeDto attribute = new AttributeDto();
-        attribute.setKey( strKey );
-        attribute.setValue( strValue );
-        map.put( attribute.getKey() , attribute );
+
+        identityService.certifyAttributes( identityChange, CERTIFIER_CODE );
     }
 
-    
+    private void addAttribute( Map<String, AttributeDto> map, String strKey, String strValue )
+    {
+        AttributeDto attribute = new AttributeDto( );
+        attribute.setKey( strKey );
+        attribute.setValue( strValue );
+        map.put( attribute.getKey( ), attribute );
+    }
+
     public static IdentityDto getIdentity( String strConnectionId )
     {
         IdentityService identityService = SpringContextService.getBean( BEAN_IDENTITYSTORE_SERVICE );
-        
+
         return identityService.getIdentityByConnectionId( strConnectionId, CLIENT_CODE );
     }
-    
+
     /**
      * returns the user connection ID
      *
      * @param request
-     *          The HTTP request
+     *            The HTTP request
      * @return the user connection ID
      * @throws UserNotSignedException
-     *           If no user is connected
+     *             If no user is connected
      */
-    private static String getUserConnectionId( HttpServletRequest request )
-        throws UserNotSignedException
+    private static String getUserConnectionId( HttpServletRequest request ) throws UserNotSignedException
     {
-        if ( SecurityService.isAuthenticationEnable(  ) )
+        if ( SecurityService.isAuthenticationEnable( ) )
         {
-            LuteceUser user = SecurityService.getInstance(  ).getRegisteredUser( request );
+            LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );
 
             if ( user != null )
             {
-                return user.getName(  );
+                return user.getName( );
             }
             else
             {
-                throw new UserNotSignedException(  );
+                throw new UserNotSignedException( );
             }
         }
         else
@@ -244,25 +234,24 @@ public class CertifierService
      * returns the user email
      *
      * @param request
-     *          The HTTP request
+     *            The HTTP request
      * @return the user connection ID
      * @throws UserNotSignedException
-     *           If no user is connected
+     *             If no user is connected
      */
-    private static String getUserEmail( HttpServletRequest request )
-        throws UserNotSignedException
+    private static String getUserEmail( HttpServletRequest request ) throws UserNotSignedException
     {
-        if ( SecurityService.isAuthenticationEnable(  ) )
+        if ( SecurityService.isAuthenticationEnable( ) )
         {
-            LuteceUser user = SecurityService.getInstance(  ).getRegisteredUser( request );
+            LuteceUser user = SecurityService.getInstance( ).getRegisteredUser( request );
 
             if ( user != null )
             {
-                return user.getEmail(  );
+                return user.getEmail( );
             }
             else
             {
-                throw new UserNotSignedException(  );
+                throw new UserNotSignedException( );
             }
         }
         else
@@ -276,9 +265,9 @@ public class CertifierService
      *
      * @return the time as a long value
      */
-    private static long getExpiresTime(  )
+    private static long getExpiresTime( )
     {
-        return now(  ) + ( (long) EXPIRES_DELAY * 60000L );
+        return now( ) + ( (long) EXPIRES_DELAY * 60000L );
     }
 
     /**
@@ -286,30 +275,26 @@ public class CertifierService
      *
      * @return current time as a long value
      */
-    private static long now(  )
+    private static long now( )
     {
-        return ( new Date(  ) ).getTime(  );
+        return ( new Date( ) ).getTime( );
     }
-
 
     /**
      * Enumeration of all validation results
      */
     public enum ValidationResult
     {
-        OK( MESSAGE_CODE_VALIDATION_OK ),
-        INVALID_CODE( MESSAGE_CODE_VALIDATION_INVALID ),
-        SESSION_EXPIRED( MESSAGE_SESSION_EXPIRED ),
-        CODE_EXPIRED( MESSAGE_CODE_EXPIRED ),
-        TOO_MANY_ATTEMPS( MESSAGE_TOO_MANY_ATTEMPS );	    	
-    	
-    	private String _strMessageKey;
+        OK( MESSAGE_CODE_VALIDATION_OK ), INVALID_CODE( MESSAGE_CODE_VALIDATION_INVALID ), SESSION_EXPIRED( MESSAGE_SESSION_EXPIRED ), CODE_EXPIRED(
+                MESSAGE_CODE_EXPIRED ), TOO_MANY_ATTEMPS( MESSAGE_TOO_MANY_ATTEMPS );
+
+        private String _strMessageKey;
 
         /**
          * Constructor
          *
          * @param strMessageKey
-         *          The i18n message key
+         *            The i18n message key
          */
         ValidationResult( String strMessageKey )
         {
@@ -321,7 +306,7 @@ public class CertifierService
          *
          * @return the i18n message key
          */
-        public String getMessageKey(  )
+        public String getMessageKey( )
         {
             return _strMessageKey;
         }

@@ -34,9 +34,6 @@ package fr.paris.lutece.plugins.fccertifier.business;
  * License 1.0
  */
 
-
-
-
 import fr.paris.lutece.plugins.fccertifier.util.DateUtils;
 import fr.paris.lutece.plugins.fccertifier.util.InseeUtils;
 import fr.paris.lutece.plugins.franceconnect.oidc.UserInfo;
@@ -46,111 +43,121 @@ import fr.paris.lutece.plugins.franceconnect.oidc.UserInfo;
  */
 public class FcIdentity extends UserInfo
 {
-    private String _strIdsBirthDate; 
-    private String _strIdsBirthPlace; 
-    private String _strIdsBirthCountry; 
-    
+    private String _strIdsBirthDate;
+    private String _strIdsBirthPlace;
+    private String _strIdsBirthCountry;
+
     public FcIdentity( UserInfo ui )
     {
-        setBirthDate( ui.getBirthDate() );
-        setBirthPlace( ui.getBirthPlace() );
-        setBirthCountry(ui.getBirthCountry());
-        setEmail(ui.getEmail() );
-        setEmailVerified( ui.getEmailVerified() );
-        setFamilyName( ui.getFamilyName() );
-        setGender( ui.getGender() );
-        setGivenName( ui.getGivenName() );
-        setMiddleName( ui.getMiddleName() );
-        setName( ui.getName());
-        setNickname( ui.getNickname() );
-        setPhoneNumber( ui.getPhoneNumber() );
-        setPhoneNumberVerified( ui.getPhoneNumberVerified() );
-        setPreferredUsername( ui.getPreferredUsername() );
-        
-        //FIXME
-        if( getBirthPlace() == null )
+        setBirthDate( ui.getBirthDate( ) );
+        setBirthPlace( ui.getBirthPlace( ) );
+        setBirthCountry( ui.getBirthCountry( ) );
+        setEmail( ui.getEmail( ) );
+        setEmailVerified( ui.getEmailVerified( ) );
+        setFamilyName( ui.getFamilyName( ) );
+        setGender( ui.getGender( ) );
+        setGivenName( ui.getGivenName( ) );
+        setMiddleName( ui.getMiddleName( ) );
+        setName( ui.getName( ) );
+        setNickname( ui.getNickname( ) );
+        setPhoneNumber( ui.getPhoneNumber( ) );
+        setPhoneNumberVerified( ui.getPhoneNumberVerified( ) );
+        setPreferredUsername( ui.getPreferredUsername( ) );
+
+        // FIXME
+        if ( getBirthPlace( ) == null )
         {
-            setBirthPlace( "67482");
+            setBirthPlace( "67482" );
         }
-        
-        _strIdsBirthDate = DateUtils.convertFcToIds( getBirthDate() );
-        _strIdsBirthPlace = InseeUtils.getPlaceName( getBirthPlace() );
-        if( _strIdsBirthDate != null && ! _strIdsBirthDate.equals( "" ))
+
+        _strIdsBirthDate = DateUtils.convertFcToIds( getBirthDate( ) );
+        _strIdsBirthPlace = InseeUtils.getPlaceName( getBirthPlace( ) );
+        if ( _strIdsBirthDate != null && !_strIdsBirthDate.equals( "" ) )
         {
             _strIdsBirthCountry = "FRANCE";
         }
         else
         {
-            _strIdsBirthCountry = InseeUtils.getCountryName( getBirthCountry() );
+            _strIdsBirthCountry = InseeUtils.getCountryName( getBirthCountry( ) );
         }
-        
+
     }
-    
-          /**
-        * Returns the IdsBirthDate
-        * @return The IdsBirthDate
-        */ 
-    public String getIdsBirthDate()
+
+    /**
+     * Returns the IdsBirthDate
+     * 
+     * @return The IdsBirthDate
+     */
+    public String getIdsBirthDate( )
     {
         return _strIdsBirthDate;
     }
-    
-       /**
-        * Sets the IdsBirthDate
-        * @param strIdsBirthDate The IdsBirthDate
-        */ 
+
+    /**
+     * Sets the IdsBirthDate
+     * 
+     * @param strIdsBirthDate
+     *            The IdsBirthDate
+     */
     public void setIdsBirthDate( String strIdsBirthDate )
     {
         _strIdsBirthDate = strIdsBirthDate;
     }
-    
-       /**
-        * Returns the IdsBirthPlace
-        * @return The IdsBirthPlace
-        */ 
-    public String getIdsBirthPlace()
+
+    /**
+     * Returns the IdsBirthPlace
+     * 
+     * @return The IdsBirthPlace
+     */
+    public String getIdsBirthPlace( )
     {
         return _strIdsBirthPlace;
     }
-    
-       /**
-        * Sets the IdsBirthPlace
-        * @param strIdsBirthPlace The IdsBirthPlace
-        */ 
+
+    /**
+     * Sets the IdsBirthPlace
+     * 
+     * @param strIdsBirthPlace
+     *            The IdsBirthPlace
+     */
     public void setIdsBirthPlace( String strIdsBirthPlace )
     {
         _strIdsBirthPlace = strIdsBirthPlace;
     }
-    
-       /**
-        * Returns the IdsBirthCountry
-        * @return The IdsBirthCountry
-        */ 
-    public String getIdsBirthCountry()
+
+    /**
+     * Returns the IdsBirthCountry
+     * 
+     * @return The IdsBirthCountry
+     */
+    public String getIdsBirthCountry( )
     {
         return _strIdsBirthCountry;
     }
-    
-       /**
-        * Sets the IdsBirthCountry
-        * @param strIdsBirthCountry The IdsBirthCountry
-        */ 
+
+    /**
+     * Sets the IdsBirthCountry
+     * 
+     * @param strIdsBirthCountry
+     *            The IdsBirthCountry
+     */
     public void setIdsBirthCountry( String strIdsBirthCountry )
     {
         _strIdsBirthCountry = strIdsBirthCountry;
     }
 
     // FIXME
-    public String getIdsGender()
+    public String getIdsGender( )
     {
-        if( getGender().equals( "male" ))
+        if ( getGender( ).equals( "male" ) )
         {
             return "1";
-        } 
-        else if( getGender().equals( "female" ))
-        {
-            return "2";
         }
+        else
+            if ( getGender( ).equals( "female" ) )
+            {
+                return "2";
+            }
         return "0";
     }
 }

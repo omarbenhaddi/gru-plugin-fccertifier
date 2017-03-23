@@ -17,7 +17,7 @@
                 <p>
                     Il propose à l'usager de se connecter à un fournisseur d'identité
                     FranceConnect afin de récupérer (avec son consentement) les
-                    informations certifiés de son état civil.
+                    informations certifiées de son état civil.
                     <ul>
                         <li>Genre (gender)</li>
                         <li>Nom de naissance (family_name)</li>
@@ -32,8 +32,8 @@
                 <p>
                     Sont à configurer dans le fichier contexte :
                     <ul>
-                        <li>Le paramétrage du module client FranceConnect</li>
-                        <li>Le paramétrage du module client IdentityStore</li>
+                        <li>Le paramétrage du module client FranceConnect (plugin-franceconnect)</li>
+                        <li>Le paramétrage du module client IdentityStore (library-identitystore)</li>
                     </ul>
                 </p>
             </subsection>

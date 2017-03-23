@@ -36,7 +36,6 @@ package fr.paris.lutece.plugins.fccertifier.service;
 
 import fr.paris.lutece.plugins.fccertifier.business.FcIdentity;
 
-
 /**
  * ValidationInfos
  */
@@ -54,7 +53,7 @@ public class ValidationInfos
      *
      * @return The FC FcIdentity
      */
-    public FcIdentity getFCUserInfo(  )
+    public FcIdentity getFCUserInfo( )
     {
         return _identity;
     }
@@ -63,20 +62,19 @@ public class ValidationInfos
      * Sets the FCUserInfo
      *
      * @param userInfo
-     *          The FC FcIdentity
+     *            The FC FcIdentity
      */
     public void setFCUserInfo( FcIdentity userInfo )
     {
         _identity = userInfo;
     }
 
-
     /**
      * Returns the UserConnectionId
      *
      * @return The UserConnectionId
      */
-    public String getUserConnectionId(  )
+    public String getUserConnectionId( )
     {
         return _strUserConnectionId;
     }
@@ -84,14 +82,14 @@ public class ValidationInfos
     /**
      * @return the _strUserEmail
      */
-    public String getUserEmail(  )
+    public String getUserEmail( )
     {
         return _strUserEmail;
     }
 
     /**
      * @param strUserEmail
-     *          the _strUserEmail to set
+     *            the _strUserEmail to set
      */
     public void setUserEmail( String strUserEmail )
     {
@@ -102,7 +100,7 @@ public class ValidationInfos
      * Sets the UserConnectionId
      *
      * @param strUserConnectionId
-     *          The UserConnectionId
+     *            The UserConnectionId
      */
     public void setUserConnectionId( String strUserConnectionId )
     {
@@ -114,7 +112,7 @@ public class ValidationInfos
      *
      * @return The expiresTime
      */
-    public long getExpiresTime(  )
+    public long getExpiresTime( )
     {
         return _expiresTime;
     }
@@ -123,7 +121,7 @@ public class ValidationInfos
      * Sets the expiresTime
      *
      * @param expiresTime
-     *          The expiresTime
+     *            The expiresTime
      */
     public void setExpiresTime( long expiresTime )
     {
@@ -135,7 +133,7 @@ public class ValidationInfos
      *
      * @return The InvalidAttempts
      */
-    public int getInvalidAttempts(  )
+    public int getInvalidAttempts( )
     {
         return _nInvalidAttempts;
     }
@@ -144,7 +142,7 @@ public class ValidationInfos
      * Sets the InvalidAttempts
      *
      * @param nInvalidAttempts
-     *          The InvalidAttempts
+     *            The InvalidAttempts
      */
     public void setInvalidAttempts( int nInvalidAttempts )
     {

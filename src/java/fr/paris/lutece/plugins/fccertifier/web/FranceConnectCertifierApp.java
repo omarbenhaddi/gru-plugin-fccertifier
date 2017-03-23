@@ -50,11 +50,9 @@ import fr.paris.lutece.portal.util.mvc.xpage.annotations.Controller;
 import fr.paris.lutece.portal.web.l10n.LocaleService;
 import fr.paris.lutece.portal.web.xpages.XPage;
 
-
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-
 
 /**
  * FranceConnect Certifier App
@@ -66,7 +64,7 @@ public class FranceConnectCertifierApp extends MVCApplication
     public static final String VIEW_VALIDATION = "validation";
     public static final String VIEW_VALIDATION_OK = "validationOK";
     public static final String VIEW_VALIDATE_FC_DATA = "validate";
-    
+
     private static final long serialVersionUID = 1L;
     private static final String TEMPLATE_HOME = "skin/plugins/identitystore/modules/fccertifier/home.html";
     private static final String TEMPLATE_VALIDATION_OK = "skin/plugins/identitystore/modules/fccertifier/validation_ok.html";
@@ -76,114 +74,111 @@ public class FranceConnectCertifierApp extends MVCApplication
     private static final String DATACLIENT_USER = "user";
     private static final String MARK_FC_INFOS = "fc_infos";
     private static final String MARK_IDENTITY = "identity";
-    
+
     private CertifierService _certifierService;
 
     /**
      * Constructor for init
      */
-    public FranceConnectCertifierApp(  )
+    public FranceConnectCertifierApp( )
     {
-        super(  );
-        _certifierService = new CertifierService(  );
+        super( );
+        _certifierService = new CertifierService( );
     }
 
     /**
      * Gets the Home page
      *
      * @param request
-     *          The HTTP request
+     *            The HTTP request
      * @return The XPage
      * @throws UserNotSignedException
-     *           if user is not connected
+     *             if user is not connected
      */
     @View( value = VIEW_HOME, defaultView = true )
     public XPage home( HttpServletRequest request ) throws UserNotSignedException
     {
         checkUserAuthentication( request );
-        
+
         _certifierService.startValidation( request );
-        
-        return getXPage( TEMPLATE_HOME, LocaleService.getDefault(  ), getModel(  ) );
+
+        return getXPage( TEMPLATE_HOME, LocaleService.getDefault( ), getModel( ) );
     }
 
     /**
      * Fetch data from FrancConnect
      *
      * @param request
-     *          The HTTP request
+     *            The HTTP request
      * @return The redirected page
      * @throws UserNotSignedException
-     *           if no user is connected
+     *             if no user is connected
      */
     @Action( ACTION_FETCH_FC_DATA )
-    public XPage doFetch( HttpServletRequest request )
-        throws UserNotSignedException
+    public XPage doFetch( HttpServletRequest request ) throws UserNotSignedException
     {
         checkUserAuthentication( request );
 
-        String strUrl = DataClientService.instance(  ).getDataClientUrl( DATACLIENT_USER );
+        String strUrl = DataClientService.instance( ).getDataClientUrl( DATACLIENT_USER );
         return redirect( request, strUrl );
     }
-    
+
     /**
      * Validate FranceConnect data
-     * @param request The HTTP request
+     * 
+     * @param request
+     *            The HTTP request
      * @return The page
-     * @throws UserNotSignedException if user not signed 
+     * @throws UserNotSignedException
+     *             if user not signed
      */
-    @View (VIEW_VALIDATE_FC_DATA )
-    public XPage validationFCData( HttpServletRequest request )
-        throws UserNotSignedException
+    @View( VIEW_VALIDATE_FC_DATA )
+    public XPage validationFCData( HttpServletRequest request ) throws UserNotSignedException
     {
         LuteceUser user = checkUserAuthentication( request );
-        Map<String, Object> model = getModel();
-        
-        UserInfo fcUserInfo = (UserInfo) request.getSession(  ).getAttribute( UserDataClient.ATTRIBUTE_USERINFO );
-        IdentityDto identity = CertifierService.getIdentity( user.getName() );
-        
-        model.put( MARK_FC_INFOS , new FcIdentity( fcUserInfo ));
-        model.put( MARK_IDENTITY , identity );
-        
-        return getXPage( TEMPLATE_VALIDATE_DATA , LocaleService.getDefault(  ), model );
-        
+        Map<String, Object> model = getModel( );
+
+        UserInfo fcUserInfo = (UserInfo) request.getSession( ).getAttribute( UserDataClient.ATTRIBUTE_USERINFO );
+        IdentityDto identity = CertifierService.getIdentity( user.getName( ) );
+
+        model.put( MARK_FC_INFOS, new FcIdentity( fcUserInfo ) );
+        model.put( MARK_IDENTITY, identity );
+
+        return getXPage( TEMPLATE_VALIDATE_DATA, LocaleService.getDefault( ), model );
+
     }
-    
 
     @Action( ACTION_CERTIFY )
-    public XPage doCertify( HttpServletRequest request )
-        throws UserNotSignedException
+    public XPage doCertify( HttpServletRequest request ) throws UserNotSignedException
     {
         checkUserAuthentication( request );
-        UserInfo fcUserInfo = (UserInfo) request.getSession(  ).getAttribute( UserDataClient.ATTRIBUTE_USERINFO );
+        UserInfo fcUserInfo = (UserInfo) request.getSession( ).getAttribute( UserDataClient.ATTRIBUTE_USERINFO );
 
         ValidationResult result = _certifierService.validate( request, fcUserInfo );
-        
+
         if ( result != ValidationResult.OK )
         {
-            addError( result.getMessageKey(  ), LocaleService.getDefault(  ) );
-
+            addError( result.getMessageKey( ), LocaleService.getDefault( ) );
 
             if ( result == ValidationResult.SESSION_EXPIRED )
             {
-                return redirectView(request, VIEW_HOME );
+                return redirectView( request, VIEW_HOME );
             }
         }
-        return redirectView(request, VIEW_VALIDATION_OK );
+        return redirectView( request, VIEW_VALIDATION_OK );
     }
-    
+
     /**
      * Displays Validation OK page
      *
      * @param request
-     *          The HTTP request
+     *            The HTTP request
      * @return The page
      * @throws UserNotSignedException
-     *           if user is not connected
+     *             if user is not connected
      */
     @View( VIEW_VALIDATION_OK )
-    public XPage validationOK( HttpServletRequest request )
-        throws UserNotSignedException
+    public XPage validationOK( HttpServletRequest request ) throws UserNotSignedException
     {
         checkUserAuthentication( request );
 
@@ -194,21 +189,19 @@ public class FranceConnectCertifierApp extends MVCApplication
      * check if user is authenticated
      *
      * @param request
-     *          request
+     *            request
      * @throws UserNotSignedException
-     *           if user is not connected
+     *             if user is not connected
      */
-    private LuteceUser checkUserAuthentication( HttpServletRequest request )
-        throws UserNotSignedException
+    private LuteceUser checkUserAuthentication( HttpServletRequest request ) throws UserNotSignedException
     {
-        LuteceUser luteceUser = SecurityService.isAuthenticationEnable(  )
-            ? SecurityService.getInstance(  ).getRegisteredUser( request ) : null;
+        LuteceUser luteceUser = SecurityService.isAuthenticationEnable( ) ? SecurityService.getInstance( ).getRegisteredUser( request ) : null;
 
         if ( luteceUser == null )
         {
-            throw new UserNotSignedException(  );
+            throw new UserNotSignedException( );
         }
         return luteceUser;
     }
-    
+
 }

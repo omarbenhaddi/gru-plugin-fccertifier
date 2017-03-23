@@ -36,18 +36,19 @@ package fr.paris.lutece.plugins.fccertifier.util;
 import fr.paris.lutece.plugins.fccertifier.business.CommunesInseeDAO;
 import fr.paris.lutece.plugins.fccertifier.business.PaysInseeDAO;
 
-
 /**
  * InseeUtils
  */
 public class InseeUtils
 {
-    private static final CommunesInseeDAO _daoCommunes = new CommunesInseeDAO();
-    private static final PaysInseeDAO _daoPays = new PaysInseeDAO();
-    
+    private static final CommunesInseeDAO _daoCommunes = new CommunesInseeDAO( );
+    private static final PaysInseeDAO _daoPays = new PaysInseeDAO( );
+
     /**
      * Give the name of the place for a given INSEE code
-     * @param strCode The INSEE code
+     * 
+     * @param strCode
+     *            The INSEE code
      * @return The name
      */
     public static String getPlaceName( String strCode )
@@ -57,7 +58,9 @@ public class InseeUtils
 
     /**
      * Give the name of the country for a given INSEE code
-     * @param strCode The INSEE code
+     * 
+     * @param strCode
+     *            The INSEE code
      * @return The name
      */
     public static String getCountryName( String strCode )

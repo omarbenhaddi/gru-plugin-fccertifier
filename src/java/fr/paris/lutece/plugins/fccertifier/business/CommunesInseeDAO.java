@@ -34,7 +34,6 @@ package fr.paris.lutece.plugins.fccertifier.business;
  * License 1.0
  */
 
-
 import fr.paris.lutece.util.sql.DAOUtil;
 
 /**
@@ -49,15 +48,15 @@ public class CommunesInseeDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT );
         daoUtil.setString( 1, strCodeCommune );
-        daoUtil.executeQuery();
+        daoUtil.executeQuery( );
 
         String strNomCommune = null;
 
-        if( daoUtil.next() )
+        if ( daoUtil.next( ) )
         {
             strNomCommune = daoUtil.getString( 1 );
         }
-        daoUtil.free();
+        daoUtil.free( );
         return strNomCommune;
     }
 

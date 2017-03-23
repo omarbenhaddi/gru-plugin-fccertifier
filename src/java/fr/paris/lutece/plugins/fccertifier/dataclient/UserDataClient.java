@@ -48,7 +48,6 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 /**
  * UserDataClient
  */
@@ -68,28 +67,27 @@ public class UserDataClient extends AbstractDataClient
             String strRedirectUrl = getViewUrl( request, FranceConnectCertifierApp.VIEW_VALIDATE_FC_DATA );
             response.sendRedirect( strRedirectUrl );
         }
-        catch ( IOException ex )
+        catch( IOException ex )
         {
-            AppLogService.error( "Error DataClient User : " + ex.getMessage(  ), ex );
+            AppLogService.error( "Error DataClient User : " + ex.getMessage( ), ex );
         }
     }
-    
 
     public static String getViewUrl( HttpServletRequest request, String strView )
     {
-        UrlItem url = new UrlItem( AppPathService.getBaseUrl( request ) + AppPathService.getPortalUrl(  ) );
+        UrlItem url = new UrlItem( AppPathService.getBaseUrl( request ) + AppPathService.getPortalUrl( ) );
         url.addParameter( MVCUtils.PARAMETER_PAGE, XPAGE_NAME );
         url.addParameter( MVCUtils.PARAMETER_VIEW, strView );
 
-        return url.toString(  );
+        return url.toString( );
     }
 
     public static String getActionUrl( HttpServletRequest request, String strAction )
     {
-        UrlItem url = new UrlItem( AppPathService.getBaseUrl( request ) + AppPathService.getPortalUrl(  ) );
+        UrlItem url = new UrlItem( AppPathService.getBaseUrl( request ) + AppPathService.getPortalUrl( ) );
         url.addParameter( MVCUtils.PARAMETER_PAGE, XPAGE_NAME );
         url.addParameter( MVCUtils.PARAMETER_ACTION, strAction );
 
-        return url.toString(  );
-    }    
+        return url.toString( );
+    }
 }

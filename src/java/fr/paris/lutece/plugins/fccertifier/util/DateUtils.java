@@ -32,7 +32,6 @@
  * License 1.0
  */
 
-
 package fr.paris.lutece.plugins.fccertifier.util;
 
 import fr.paris.lutece.portal.service.util.AppLogService;
@@ -43,12 +42,12 @@ import java.util.Date;
 /**
  * DateUtils
  */
-public class DateUtils 
+public class DateUtils
 {
     private static final SimpleDateFormat DATE_FORMAT_IDENTITYSTORE = new SimpleDateFormat( "dd/MM/yyyy" );
     private static final SimpleDateFormat DATE_FORMAT_FRANCECONNECT = new SimpleDateFormat( "yyyy-MM-dd" );
-    
-    public static String convertFcToIds( String strDate ) 
+
+    public static String convertFcToIds( String strDate )
     {
         String strConvertedDate = null;
         try
@@ -58,9 +57,9 @@ public class DateUtils
         }
         catch( ParseException ex )
         {
-            AppLogService.error( "Error converting date : " + ex , ex );
+            AppLogService.error( "Error converting date : " + ex, ex );
         }
         return strConvertedDate;
     }
-    
+
 }

@@ -34,15 +34,12 @@ package fr.paris.lutece.plugins.fccertifier.business;
  * License 1.0
  */
 
-
-
-
 import fr.paris.lutece.util.sql.DAOUtil;
 
 /**
  * PaysInseeDAO
  */
-public class PaysInseeDAO 
+public class PaysInseeDAO
 {
     private static final String SQL_QUERY_SELECT = "SELECT nom_pays FROM fccertifier_insee_pays WHERE code_pays = ?";
 
@@ -50,15 +47,15 @@ public class PaysInseeDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT );
         daoUtil.setString( 1, strCodePays );
-        daoUtil.executeQuery();
+        daoUtil.executeQuery( );
 
         String strNomPays = null;
 
-        if( daoUtil.next() )
+        if ( daoUtil.next( ) )
         {
             strNomPays = daoUtil.getString( 1 );
         }
-        daoUtil.free();
+        daoUtil.free( );
         return strNomPays;
     }
 }
