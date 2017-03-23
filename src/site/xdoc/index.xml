@@ -1,23 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document>
     <properties>
-        <title>Plugin fccertifier</title>
+        <title>Plugin FranceConnect Certificateur (fccertifier)</title>
     </properties>
     <body>
-        <section name="Plugin fccertifier">
-            <!--
+        <section name="Plugin FranceConnect Certificateur (fccertifier)">
             <p>
-                <img src="images/fccertifier.png" />
+                <img src="images/franceconnect.png" />
             </p>
-            -->
+  
             <subsection name="Introduction">
-                <p></p>
+                <p>
+                    Ce plugin permet de certifier dans IdentityStore les attributs 
+                    d'état civil d'un usager.
+                </p>
+                <p>
+                    Il propose à l'usager de se connecter à un fournisseur d'identité
+                    FranceConnect afin de récupérer (avec son consentement) les
+                    informations certifiés de son état civil.
+                    <ul>
+                        <li>Genre (gender)</li>
+                        <li>Nom de naissance (family_name)</li>
+                        <li>Prénoms (given_name)</li>
+                        <li>Date de naissance (birthdate)</li>
+                        <li>Lieu de naissance (birthplace)</li>
+                        <li>Pays de naissance (birthcountry)</li>
+                    </ul>   
+                </p>
             </subsection>
             <subsection name="Configuration">
-                <p></p>
-            </subsection>
-            <subsection name="Usage">
-                <p></p>
+                <p>
+                    Sont à configurer dans le fichier contexte :
+                    <ul>
+                        <li>Le paramétrage du module client FranceConnect</li>
+                        <li>Le paramétrage du module client IdentityStore</li>
+                    </ul>
+                </p>
             </subsection>
         </section>
     </body>
