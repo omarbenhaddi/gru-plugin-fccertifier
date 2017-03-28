@@ -75,7 +75,7 @@ public class FranceConnectCertifierApp extends MVCApplication
     private static final String MARK_FC_INFOS = "fc_infos";
     private static final String MARK_IDENTITY = "identity";
 
-    private CertifierService _certifierService;
+    private final CertifierService _certifierService;
 
     /**
      * Constructor for init
@@ -148,6 +148,12 @@ public class FranceConnectCertifierApp extends MVCApplication
 
     }
 
+    /**
+     * Process Certify action
+     * @param request The HTTP request
+     * @return The page
+     * @throws UserNotSignedException if user not signed 
+     */
     @Action( ACTION_CERTIFY )
     public XPage doCertify( HttpServletRequest request ) throws UserNotSignedException
     {
@@ -190,6 +196,7 @@ public class FranceConnectCertifierApp extends MVCApplication
      *
      * @param request
      *            request
+     * @return The connected Lutece user
      * @throws UserNotSignedException
      *             if user is not connected
      */

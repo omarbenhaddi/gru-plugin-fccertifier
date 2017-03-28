@@ -39,11 +39,18 @@ import fr.paris.lutece.plugins.fccertifier.business.PaysInseeDAO;
 /**
  * InseeUtils
  */
-public class InseeUtils
+public final class InseeUtils
 {
-    private static final CommunesInseeDAO _daoCommunes = new CommunesInseeDAO( );
-    private static final PaysInseeDAO _daoPays = new PaysInseeDAO( );
+    private static final CommunesInseeDAO DAO_COMMUNES = new CommunesInseeDAO( );
+    private static final PaysInseeDAO DAO_PAYS = new PaysInseeDAO( );
 
+    /**
+     * Private constructor
+     */
+    private InseeUtils()
+    {
+    }
+    
     /**
      * Give the name of the place for a given INSEE code
      * 
@@ -53,7 +60,7 @@ public class InseeUtils
      */
     public static String getPlaceName( String strCode )
     {
-        return _daoCommunes.findByCode( strCode );
+        return DAO_COMMUNES.findByCode( strCode );
     }
 
     /**
@@ -65,6 +72,6 @@ public class InseeUtils
      */
     public static String getCountryName( String strCode )
     {
-        return _daoPays.findByCode( strCode );
+        return DAO_PAYS.findByCode( strCode );
     }
 }

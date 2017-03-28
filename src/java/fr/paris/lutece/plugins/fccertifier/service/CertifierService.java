@@ -56,10 +56,11 @@ import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.portal.service.security.UserNotSignedException;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
+import java.io.Serializable;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -67,7 +68,7 @@ import javax.servlet.http.HttpSession;
 /**
  * FranceConnect Certifier Service
  */
-public class CertifierService
+public class CertifierService implements Serializable
 {
     private static final String MESSAGE_CODE_VALIDATION_OK = "module.identitystore.fccertifier.message.validation.ok";
     private static final String MESSAGE_CODE_VALIDATION_INVALID = "module.identitystore.fccertifier.message.validation.invalidCode";
@@ -88,15 +89,7 @@ public class CertifierService
     private static final String CERTIFIER_CODE = "fccertifier";
     private static final String CLIENT_CODE = AppPropertiesService.getProperty( PROPERTY_IDENTITY_SERVICE_CLIENT_CODE );
 
-    private static Map<String, ValidationInfos> _mapValidationInfos = new HashMap<String, ValidationInfos>( );
-
-    /**
-     * constructor
-     */
-    public CertifierService( )
-    {
-        super( );
-    }
+    private static Map<String, ValidationInfos> _mapValidationInfos = new ConcurrentHashMap<String, ValidationInfos>( );
 
     /**
      * Starts the validation process by generating and sending a validation code
@@ -153,6 +146,10 @@ public class CertifierService
         return ValidationResult.OK;
     }
 
+    /**
+     * Certify attributes
+     * @param infos Validation infos
+     */
     private void certify( ValidationInfos infos )
     {
         IdentityService identityService = SpringContextService.getBean( BEAN_IDENTITYSTORE_SERVICE );
@@ -161,7 +158,7 @@ public class CertifierService
         IdentityDto identity = new IdentityDto( );
 
         identity.setConnectionId( infos.getUserConnectionId( ) );
-        Map<String, AttributeDto> mapAttributes = new HashMap<>( );
+        Map<String, AttributeDto> mapAttributes = new ConcurrentHashMap<>( );
         FcIdentity user = infos.getFCUserInfo( );
         addAttribute( mapAttributes, "birthdate", user.getIdsBirthDate( ) );
         addAttribute( mapAttributes, "fc_birthdate", user.getBirthDate( ) );
@@ -185,6 +182,12 @@ public class CertifierService
         identityService.certifyAttributes( identityChange, CERTIFIER_CODE );
     }
 
+    /**
+     * Add attribute DTO to a map
+     * @param map The map
+     * @param strKey The attribute key
+     * @param strValue The attribute value
+     */
     private void addAttribute( Map<String, AttributeDto> map, String strKey, String strValue )
     {
         AttributeDto attribute = new AttributeDto( );
@@ -193,6 +196,11 @@ public class CertifierService
         map.put( attribute.getKey( ), attribute );
     }
 
+    /**
+     * Get the Identity DTO from a connection ID
+     * @param strConnectionId The connection ID
+     * @return The identity
+     */
     public static IdentityDto getIdentity( String strConnectionId )
     {
         IdentityService identityService = SpringContextService.getBean( BEAN_IDENTITYSTORE_SERVICE );
@@ -254,10 +262,7 @@ public class CertifierService
                 throw new UserNotSignedException( );
             }
         }
-        else
-        {
-            return MOCKED_USER_EMAIL;
-        }
+        return MOCKED_USER_EMAIL;
     }
 
     /**

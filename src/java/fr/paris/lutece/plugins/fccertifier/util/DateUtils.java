@@ -35,6 +35,7 @@
 package fr.paris.lutece.plugins.fccertifier.util;
 
 import fr.paris.lutece.portal.service.util.AppLogService;
+import fr.paris.lutece.portal.web.l10n.LocaleService;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -42,12 +43,24 @@ import java.util.Date;
 /**
  * DateUtils
  */
-public class DateUtils
+public final class DateUtils
 {
-    private static final SimpleDateFormat DATE_FORMAT_IDENTITYSTORE = new SimpleDateFormat( "dd/MM/yyyy" );
-    private static final SimpleDateFormat DATE_FORMAT_FRANCECONNECT = new SimpleDateFormat( "yyyy-MM-dd" );
+    private static final SimpleDateFormat DATE_FORMAT_IDENTITYSTORE = new SimpleDateFormat( "dd/MM/yyyy" , LocaleService.getDefault() );
+    private static final SimpleDateFormat DATE_FORMAT_FRANCECONNECT = new SimpleDateFormat( "yyyy-MM-dd" , LocaleService.getDefault() );
 
-    public static String convertFcToIds( String strDate )
+    /**
+     * Private constructor
+     */
+    private DateUtils()
+    {
+    }
+    
+    /**
+     * Convert Date format from FranceConnect to IdentityStore
+     * @param strDate The input date
+     * @return The output date
+     */
+    public static synchronized String convertFcToIds( String strDate )
     {
         String strConvertedDate = null;
         try

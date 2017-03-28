@@ -11,9 +11,9 @@
             Voulez-vous remplacer et compl&eacute;ter les informations de votre profil 
             <#if identity?? && identity.attributes??>
             <ul>
-                <li>Nom de naissance : $ {identity.attributes.family_name.value!''}</li>
-                <li>Date de naissance : $ {identity.attributes.birthdate.value!''}</li>
-                <li>Lieu de naissance : $ {identity.attributes.birthplace.value!''}</li>
+                <li>Nom de naissance : ${identity.attributes.familyName.value!''}</li>
+                <li>Date de naissance : ${identity.attributes.birthdate.value!''}</li>
+                <li>Lieu de naissance : ${identity.attributes.birthplace.value!''}</li>
             </ul>
             <#else>
                 Identity is null

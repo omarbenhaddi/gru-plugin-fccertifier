@@ -1,5 +1,3 @@
-package fr.paris.lutece.plugins.fccertifier.business;
-
 /*
  * Copyright (c) 2002-2015, Mairie de Paris
  * All rights reserved.
@@ -34,6 +32,9 @@ package fr.paris.lutece.plugins.fccertifier.business;
  * License 1.0
  */
 
+package fr.paris.lutece.plugins.fccertifier.business;
+
+
 import fr.paris.lutece.util.sql.DAOUtil;
 
 /**
@@ -44,6 +45,11 @@ public class CommunesInseeDAO
 
     private static final String SQL_QUERY_SELECT = "SELECT nom_commune FROM fccertifier_insee_communes WHERE code_commune = ?";
 
+    /**
+     * Find a city name from its code
+     * @param strCodeCommune The code
+     * @return The city name
+     */
     public String findByCode( String strCodeCommune )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT );

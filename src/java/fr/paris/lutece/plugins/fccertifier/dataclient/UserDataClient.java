@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2017, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -56,6 +56,9 @@ public class UserDataClient extends AbstractDataClient
     public static final String ATTRIBUTE_USERINFO = "fccertifier-userinfo";
     private static final String XPAGE_NAME = "fccertifier";
 
+    /**
+     * {@inheritDoc }
+     */
     @Override
     public void handleToken( Token token, HttpServletRequest request, HttpServletResponse response )
     {
@@ -73,6 +76,12 @@ public class UserDataClient extends AbstractDataClient
         }
     }
 
+    /**
+     * Build the view URL
+     * @param request The HTTP request
+     * @param strView The view name
+     * @return The URL
+     */
     public static String getViewUrl( HttpServletRequest request, String strView )
     {
         UrlItem url = new UrlItem( AppPathService.getBaseUrl( request ) + AppPathService.getPortalUrl( ) );
@@ -82,6 +91,12 @@ public class UserDataClient extends AbstractDataClient
         return url.toString( );
     }
 
+    /**
+     * Build the action URL
+     * @param request The HTTP request
+     * @param strAction The action name
+     * @return The action URL
+     */
     public static String getActionUrl( HttpServletRequest request, String strAction )
     {
         UrlItem url = new UrlItem( AppPathService.getBaseUrl( request ) + AppPathService.getPortalUrl( ) );

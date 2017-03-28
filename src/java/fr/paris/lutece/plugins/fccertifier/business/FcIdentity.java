@@ -1,5 +1,3 @@
-package fr.paris.lutece.plugins.fccertifier.business;
-
 /*
  * Copyright (c) 2002-2017, Mairie de Paris
  * All rights reserved.
@@ -34,6 +32,9 @@ package fr.paris.lutece.plugins.fccertifier.business;
  * License 1.0
  */
 
+package fr.paris.lutece.plugins.fccertifier.business;
+
+
 import fr.paris.lutece.plugins.fccertifier.util.DateUtils;
 import fr.paris.lutece.plugins.fccertifier.util.InseeUtils;
 import fr.paris.lutece.plugins.franceconnect.oidc.UserInfo;
@@ -47,22 +48,28 @@ public class FcIdentity extends UserInfo
     private String _strIdsBirthPlace;
     private String _strIdsBirthCountry;
 
-    public FcIdentity( UserInfo ui )
+    /**
+     * Constructor
+     * @param userInfo UserInfo
+     */
+    public FcIdentity( UserInfo userInfo )
     {
-        setBirthDate( ui.getBirthDate( ) );
-        setBirthPlace( ui.getBirthPlace( ) );
-        setBirthCountry( ui.getBirthCountry( ) );
-        setEmail( ui.getEmail( ) );
-        setEmailVerified( ui.getEmailVerified( ) );
-        setFamilyName( ui.getFamilyName( ) );
-        setGender( ui.getGender( ) );
-        setGivenName( ui.getGivenName( ) );
-        setMiddleName( ui.getMiddleName( ) );
-        setName( ui.getName( ) );
-        setNickname( ui.getNickname( ) );
-        setPhoneNumber( ui.getPhoneNumber( ) );
-        setPhoneNumberVerified( ui.getPhoneNumberVerified( ) );
-        setPreferredUsername( ui.getPreferredUsername( ) );
+        super();
+        
+        setBirthDate( userInfo.getBirthDate( ) );
+        setBirthPlace( userInfo.getBirthPlace( ) );
+        setBirthCountry( userInfo.getBirthCountry( ) );
+        setEmail( userInfo.getEmail( ) );
+        setEmailVerified( userInfo.getEmailVerified( ) );
+        setFamilyName( userInfo.getFamilyName( ) );
+        setGender( userInfo.getGender( ) );
+        setGivenName( userInfo.getGivenName( ) );
+        setMiddleName( userInfo.getMiddleName( ) );
+        setName( userInfo.getName( ) );
+        setNickname( userInfo.getNickname( ) );
+        setPhoneNumber( userInfo.getPhoneNumber( ) );
+        setPhoneNumberVerified( userInfo.getPhoneNumberVerified( ) );
+        setPreferredUsername( userInfo.getPreferredUsername( ) );
 
         // FIXME
         if ( getBirthPlace( ) == null )
@@ -146,7 +153,10 @@ public class FcIdentity extends UserInfo
         _strIdsBirthCountry = strIdsBirthCountry;
     }
 
-    // FIXME
+    /**
+     * Gender conversion
+     * @return The Gender in IDStore format
+     */
     public String getIdsGender( )
     {
         if ( getGender( ).equals( "male" ) )

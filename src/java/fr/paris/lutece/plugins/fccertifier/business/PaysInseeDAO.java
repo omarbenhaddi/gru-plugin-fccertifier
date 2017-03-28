@@ -1,5 +1,3 @@
-package fr.paris.lutece.plugins.fccertifier.business;
-
 /*
  * Copyright (c) 2002-2017, Mairie de Paris
  * All rights reserved.
@@ -34,6 +32,10 @@ package fr.paris.lutece.plugins.fccertifier.business;
  * License 1.0
  */
 
+
+package fr.paris.lutece.plugins.fccertifier.business;
+
+
 import fr.paris.lutece.util.sql.DAOUtil;
 
 /**
@@ -43,6 +45,11 @@ public class PaysInseeDAO
 {
     private static final String SQL_QUERY_SELECT = "SELECT nom_pays FROM fccertifier_insee_pays WHERE code_pays = ?";
 
+    /**
+     * Get country name from its INSEE code
+     * @param strCodePays The INSEE code
+     * @return The country name
+     */
     public String findByCode( String strCodePays )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT );
