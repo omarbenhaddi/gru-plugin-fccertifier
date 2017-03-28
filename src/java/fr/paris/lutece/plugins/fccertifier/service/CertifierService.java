@@ -41,16 +41,6 @@ import fr.paris.lutece.plugins.identitystore.web.rs.dto.AuthorDto;
 import fr.paris.lutece.plugins.identitystore.web.rs.dto.IdentityChangeDto;
 import fr.paris.lutece.plugins.identitystore.web.rs.dto.IdentityDto;
 import fr.paris.lutece.plugins.identitystore.web.service.IdentityService;
-
-/*
- import fr.paris.lutece.plugins.identitystore.business.AttributeCertificate;
- import fr.paris.lutece.plugins.identitystore.business.AttributeCertifier;
- import fr.paris.lutece.plugins.identitystore.business.AttributeCertifierHome;
- import fr.paris.lutece.plugins.identitystore.business.Identity;
- import fr.paris.lutece.plugins.identitystore.business.IdentityHome;
- import fr.paris.lutece.plugins.identitystore.service.ChangeAuthor;
- import fr.paris.lutece.plugins.identitystore.service.IdentityStoreService;
- */
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.portal.service.security.UserNotSignedException;
