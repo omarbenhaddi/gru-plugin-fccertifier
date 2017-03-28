@@ -151,16 +151,16 @@ public class CertifierService implements Serializable
         Map<String, AttributeDto> mapAttributes = new ConcurrentHashMap<>( );
         FcIdentity user = infos.getFCUserInfo( );
         addAttribute( mapAttributes, "birthdate", user.getIdsBirthDate( ) );
-        addAttribute( mapAttributes, "fc_birthdate", user.getBirthDate( ) );
         addAttribute( mapAttributes, "birthplace", user.getIdsBirthPlace( ) );
-        addAttribute( mapAttributes, "fc_birthplace", user.getBirthPlace( ) );
         addAttribute( mapAttributes, "birthcountry", user.getIdsBirthCountry( ) );
-        addAttribute( mapAttributes, "fc_birthcountry", user.getBirthCountry( ) );
         addAttribute( mapAttributes, "gender", user.getIdsGender( ) );
+        addAttribute( mapAttributes, "family_name", user.getGivenName( ) );
         addAttribute( mapAttributes, "fc_gender", user.getGender( ) );
         addAttribute( mapAttributes, "fc_given_name", user.getGivenName( ) );
-        addAttribute( mapAttributes, "family_name", user.getGivenName( ) );
-        addAttribute( mapAttributes, "fc_family_name", user.getGivenName( ) );
+        addAttribute( mapAttributes, "fc_family_name", user.getFamilyName() );
+        addAttribute( mapAttributes, "fc_birthdate", user.getBirthDate( ) );
+        addAttribute( mapAttributes, "fc_birthplace", user.getBirthPlace( ) );
+        addAttribute( mapAttributes, "fc_birthcountry", user.getBirthCountry( ) );
 
         identity.setAttributes( mapAttributes );
         identityChange.setIdentity( identity );

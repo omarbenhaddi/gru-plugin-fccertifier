@@ -5,21 +5,23 @@
         <form action="jsp/site/Portal.jsp" method="post" >
             <input type="hidden" name="page" value="fccertifier" >
             <input type="hidden" name="action" value="fetch" >
-            <h1>#i18n{fccertifier.home.pageTitle}</h1>
+            <h2>#i18n{fccertifier.home.pageTitle}</h2>
 
             <@messages errors=errors />
+            <p style="text-align:center;width:100%;">
+                <img src="images/skin/plugins/fccertifier/franceconnect.png" class="img-responsive" style="margin:0 auto" />
+                <br>
+                #i18n{fccertifier.home.labelExplaination} 
 
-            <img src="images/skin/plugins/fccertifier/franceconnect.png" class="img-responsive" />
-            <br>
-            #i18n{fccertifier.home.labelExplaination} 
-            <br>
-            <br>
-            <button class="btn btn-primary" type="submit">
-                #i18n{fccertifier.home.buttonSubmit}
-            </button>
-            <a class="btn btn-default" href="jsp/site/Portal.jsp?page=mydashboardIdentity&view=viewIdentity" role="button">
-                Annuler
-            </a>
+                <br>
+                <br>
+                <input type="image" src="images/skin/plugins/fccertifier/connect.png" />
+                <br>
+                <br>
+                <a class="btn btn-default" href="jsp/site/Portal.jsp?page=mydashboardIdentity&view=viewIdentity" role="button">
+                    #i18n{portal.util.labelCancel}
+                </a>
+            </p>
 
         </form>
     </div>
