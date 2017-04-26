@@ -154,7 +154,8 @@ public class CertifierService implements Serializable
         addAttribute( mapAttributes, "birthplace", user.getIdsBirthPlace( ) );
         addAttribute( mapAttributes, "birthcountry", user.getIdsBirthCountry( ) );
         addAttribute( mapAttributes, "gender", user.getIdsGender( ) );
-        addAttribute( mapAttributes, "family_name", user.getGivenName( ) );
+        addAttribute( mapAttributes, "first_name", user.getGivenName( ) );
+        addAttribute( mapAttributes, "family_name", user.getFamilyName( ) );
         addAttribute( mapAttributes, "fc_gender", user.getGender( ) );
         addAttribute( mapAttributes, "fc_given_name", user.getGivenName( ) );
         addAttribute( mapAttributes, "fc_family_name", user.getFamilyName() );
