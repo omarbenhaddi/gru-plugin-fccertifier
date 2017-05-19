@@ -1,48 +1,104 @@
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
-
+        <@rowBox>
+            <h1 class="text-center col-md-12">#i18n{fccertifier.validate_data.pageTitle}</h1>
+        </@rowBox>
+        <@rowBox>
+            <p class="text-center">#i18n{fccertifier.validate_data.ask_certify_and_fill}</p>
+        </@rowBox>
         <form action="jsp/site/Portal.jsp" method="post" >
             <input type="hidden" name="page" value="fccertifier" >
             <input type="hidden" name="action" value="certify" >
-            <h1>Confirmation des donn&eacute;es</h1>
+            
 
-            <@messages errors=errors />
-
-            Voulez-vous remplacer et compl&eacute;ter les informations de votre profil 
-            <#if identity?? && identity.attributes??>
-            <ul>
-                <#if identity.attributes.family_name??><li>Nom de naissance : ${identity.attributes.family_name.value!''}</li></#if>
-                <#if identity.attributes.birthdate??><li>Date de naissance : ${identity.attributes.birthdate.value!''}</li></#if>
-                <#if identity.attributes.birthplace??><li>Lieu de naissance : ${identity.attributes.birthplace.value!''}</li></#if>
-            </ul>
-            <#else>
-                Identity is null
-            </#if>
-            <p>par ces informations certifi&eacute;es par FranceConnect ?</p>
-            <ul>
-                <li>Civilit&eacute; : 
-                    <#switch fc_infos.idsGender >
-                        <#case "1"> Monsieur
-                        <#break>
-                        <#case "2"> Madame
-                        <#break>
-                        <#default> Non définie
-                    </#switch>
-                    [${fc_infos.gender!''}]
-                </li>
-                <li>Liste des pr&eacute;noms : ${fc_infos.givenName!''}</li>
-                <li>Nom de naissance : ${fc_infos.familyName!''}</li>
-                <li>Date de naissance : ${fc_infos.idsBirthDate!''} [${fc_infos.birthDate!''}]</li>
-                <li>Lieu de naissance : ${fc_infos.idsBirthPlace!''} [${fc_infos.birthPlace!''}]</li>
-                <li>Pays de naissance : ${fc_infos.idsBirthCountry!''} [${fc_infos.birthCountry!''}]</li>
-            </ul>
-            <br>
+        <@messages errors=errors />
+        <@rowBox>
+            <@table>
+                <tr>
+                    <th>#i18n{fccertifier.validate_data.field}</th>
+                    <th>#i18n{fccertifier.validate_data.profile}</th>
+                    <th>#i18n{fccertifier.validate_data.fc_datas}</th>
+                </tr>
+                <tr>
+                    <td>#i18n{fccertifier.validate_data.gender}</td>
+                    <td>
+                        <#if identity.attributes.gender??>
+                            <#switch identity.attributes.gender >
+                                <#case "2">#i18n{fccertifier.validate_data.gender.male}
+                                <#break>
+                                <#case "1">#i18n{fccertifier.validate_data.gender.female}
+                                <#break>
+                                <#default>#i18n{fccertifier.validate_data.emptyProfile}
+                            </#switch>
+                        </#if>
+                    </td>
+                    <td>
+                        <#if fc_infos.idsGender??>
+                            <#switch fc_infos.idsGender >
+                                <#case "2">#i18n{fccertifier.validate_data.gender.male}
+                                <#break>
+                                <#case "1">#i18n{fccertifier.validate_data.gender.female}
+                                <#break>
+                                <#default>#i18n{fccertifier.validate_data.emptyFC}
+                            </#switch>
+                        </#if>
+                    </td>
+                </tr>
+                <tr>
+                    <td>#i18n{fccertifier.validate_data.firstName}</td>
+                    <td>
+                        ${identity.attributes.first_name.value!''}
+                    </td>
+                    <td>
+                        ${fc_infos.givenName!''}
+                    </td>
+                </tr>
+                <tr>
+                    <td>#i18n{fccertifier.validate_data.lastName}</td>
+                    <td>
+                        ${identity.attributes.family_name.value!''}
+                    </td>
+                    <td>
+                        ${fc_infos.familyName!''}
+                    </td>
+                </tr>
+                <tr>
+                    <td>#i18n{fccertifier.validate_data.birthDate}</td>
+                    <td>
+                        ${identity.attributes.birthdate.value!''}
+                    </td>
+                    <td>
+                        ${fc_infos.idsBirthDate!''}
+                    </td>
+                </tr>
+                <tr>
+                    <td>#i18n{fccertifier.validate_data.birthPlace}</td>
+                    <td>
+                        ${identity.attributes.birthplace.value!''}
+                    </td>
+                    <td>
+                        ${fc_infos.idsBirthPlace!''}
+                    </td>
+                </tr>
+                <tr>
+                    <td>#i18n{fccertifier.validate_data.birthCountry}</td>
+                    <td>
+                        ${identity.attributes.birthcountry.value!''}
+                    </td>
+                    <td>
+                        ${fc_infos.birthcountry!'#i18n{fccertifier.validate_data.France}'}
+                    </td>
+                </tr>
+             </@table>
+          </@rowBox>
+	  <div style="display:flex; justify-content:center;">
             <button class="btn btn-primary" type="submit">
-                Confirmer la mise &agrave; jour
+                #i18n{fccertifier.validate_data.confirm}
             </button>
             <a class="btn btn-default" href="jsp/site/Portal.jsp?page=mydashboardIdentity&view=viewIdentity" role="button">
-                Annuler
+                #i18n{fccertifier.validate_data.cancel}
             </a>
+	  </div>
 
         </form>
     </div>
