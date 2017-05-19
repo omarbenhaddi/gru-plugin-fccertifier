@@ -43,6 +43,8 @@ import fr.paris.lutece.plugins.identitystore.web.rs.dto.IdentityDto;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.portal.service.security.UserNotSignedException;
+import fr.paris.lutece.portal.service.util.AppPathService;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.util.mvc.xpage.MVCApplication;
@@ -60,21 +62,40 @@ import javax.servlet.http.HttpServletRequest;
 @Controller( xpageName = "fccertifier", pageTitleI18nKey = "fccertifier.xpage.fccertifier.pageTitle", pagePathI18nKey = "fccertifier.xpage.fccertifier.pagePathLabel" )
 public class FranceConnectCertifierApp extends MVCApplication
 {
+    private static final long serialVersionUID = 1L;
+    
+    //Views
     public static final String VIEW_HOME = "home";
     public static final String VIEW_VALIDATION = "validation";
     public static final String VIEW_VALIDATION_OK = "validationOK";
     public static final String VIEW_VALIDATE_FC_DATA = "validate";
-
-    private static final long serialVersionUID = 1L;
+    public static final String VIEW_RECERTIFY_OR_DELETE = "recertificyOrDeleteCertification";
+    public static final String VIEW_CONFIRM_DELETE_CERTIFICATE = "confirmDeleteCertificate";
+    public static final String VIEW_DELETE_CERTIFICATION_OK = "deleteCertificationOk";
+    
+    //Templates
     private static final String TEMPLATE_HOME = "skin/plugins/identitystore/modules/fccertifier/home.html";
     private static final String TEMPLATE_VALIDATION_OK = "skin/plugins/identitystore/modules/fccertifier/validation_ok.html";
     private static final String TEMPLATE_VALIDATE_DATA = "skin/plugins/identitystore/modules/fccertifier/validate_data.html";
+    private static final String TEMPLATE_RECERTIFICATE_OR_DELETE_CERTIFICATION = "skin/plugins/identitystore/modules/fccertifier/recertify_or_delete_certification.html";
+    private static final String TEMPLATE_CONFIRM_DELETE_CERTIFICATE = "skin/plugins/identitystore/modules/fccertifier/confirm_delete_certification.html";
+    private static final String TEMPLATE_DELETE_CERTIFICATION_OK = "skin/plugins/identitystore/modules/fccertifier/delete_certification_ok.html";
+    
+    
+    //Actions
     private static final String ACTION_FETCH_FC_DATA = "fetch";
     private static final String ACTION_CERTIFY = "certify";
-    private static final String DATACLIENT_USER = "user";
+    private static final String ACTION_DELETE_CERTIFICATION = "deleteCertification";
+    
+    //Markers
     private static final String MARK_FC_INFOS = "fc_infos";
     private static final String MARK_IDENTITY = "identity";
+    private static final String MARK_JSP_MYDASHBOARD = "jsp_mydashboard";
+    
+    //Properties
+    private static final String PROPERTY_JSP_MYDASHBOARD = AppPropertiesService.getProperty( "fccertifier.mydashboard.identity.xpage" );
 
+    private static final String DATACLIENT_USER = "user";
     private final CertifierService _certifierService;
 
     /**
@@ -209,6 +230,84 @@ public class FranceConnectCertifierApp extends MVCApplication
             throw new UserNotSignedException( );
         }
         return luteceUser;
+    }
+    
+    /**
+     * Gets the Recerify or delete certification page
+     *
+     * @param request
+     *            The HTTP request
+     * @return The XPage
+     * @throws UserNotSignedException
+     *             if user is not connected
+     */
+    @View( value = VIEW_RECERTIFY_OR_DELETE )
+    public XPage getRecertifyOrDelete( HttpServletRequest request ) throws UserNotSignedException
+    {
+        checkUserAuthentication( request );
+        
+        Map<String,Object> model = getModel( );
+        model.put( MARK_JSP_MYDASHBOARD, PROPERTY_JSP_MYDASHBOARD );
+        
+        return getXPage( TEMPLATE_RECERTIFICATE_OR_DELETE_CERTIFICATION, LocaleService.getDefault( ), model );
+    }
+    
+    /**
+     * Gets the Recerify or delete certification page
+     *
+     * @param request
+     *            The HTTP request
+     * @return The XPage
+     * @throws UserNotSignedException
+     *             if user is not connected
+     */
+    @View( value = VIEW_CONFIRM_DELETE_CERTIFICATE )
+    public XPage getConfirmDeleteCertification( HttpServletRequest request ) throws UserNotSignedException
+    {
+        checkUserAuthentication( request );
+        
+        Map<String,Object> model = getModel( );
+        model.put( MARK_JSP_MYDASHBOARD, PROPERTY_JSP_MYDASHBOARD );
+
+        return getXPage( TEMPLATE_CONFIRM_DELETE_CERTIFICATE, LocaleService.getDefault( ), model );
+    }
+    
+    /**
+     * Gets the Recerify or delete certification page
+     *
+     * @param request
+     *            The HTTP request
+     * @return The XPage
+     * @throws UserNotSignedException
+     *             if user is not connected
+     */
+    @Action( value = ACTION_DELETE_CERTIFICATION )
+    public XPage doRecertify( HttpServletRequest request ) throws UserNotSignedException
+    {
+        checkUserAuthentication( request );
+        
+        _certifierService.deleteCertification( request );
+        return redirectView( request, VIEW_DELETE_CERTIFICATION_OK );
+    }
+    
+    /**
+     * Gets the Recerify or delete certification page
+     *
+     * @param request
+     *            The HTTP request
+     * @return The XPage
+     * @throws UserNotSignedException
+     *             if user is not connected
+     */
+    @View( value = VIEW_DELETE_CERTIFICATION_OK )
+    public XPage getDeleteCertificationOk( HttpServletRequest request ) throws UserNotSignedException
+    {
+        checkUserAuthentication( request );
+        
+        Map<String,Object> model = getModel( );
+        model.put( MARK_JSP_MYDASHBOARD, PROPERTY_JSP_MYDASHBOARD );
+        
+        return getXPage( TEMPLATE_DELETE_CERTIFICATION_OK, LocaleService.getDefault( ), model );
     }
 
 }

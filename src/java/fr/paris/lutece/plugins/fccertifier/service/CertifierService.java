@@ -38,6 +38,7 @@ import fr.paris.lutece.plugins.fccertifier.business.FcIdentity;
 import fr.paris.lutece.plugins.franceconnect.oidc.UserInfo;
 import fr.paris.lutece.plugins.identitystore.web.rs.dto.AttributeDto;
 import fr.paris.lutece.plugins.identitystore.web.rs.dto.AuthorDto;
+import fr.paris.lutece.plugins.identitystore.web.rs.dto.CertificateDto;
 import fr.paris.lutece.plugins.identitystore.web.rs.dto.IdentityChangeDto;
 import fr.paris.lutece.plugins.identitystore.web.rs.dto.IdentityDto;
 import fr.paris.lutece.plugins.identitystore.web.service.IdentityService;
@@ -54,6 +55,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * FranceConnect Certifier Service
@@ -307,5 +309,56 @@ public class CertifierService implements Serializable
             return _strMessageKey;
         }
 
+    }
+    
+    /**
+     * delete FranceConnect certification
+     * @param request
+     * @throws UserNotSignedException 
+     */
+    public void deleteCertification ( HttpServletRequest request ) throws UserNotSignedException
+    {
+        IdentityService identityService = SpringContextService.getBean( BEAN_IDENTITYSTORE_SERVICE );
+        
+        String strConnectionId = getUserConnectionId( request );
+        
+        AuthorDto author = new AuthorDto( );
+        IdentityChangeDto identityChange = new IdentityChangeDto( );
+        IdentityDto identity = getIdentity( strConnectionId );
+        
+        deleteCertificateAttribute ( identity.getAttributes( ).get( "birthdate" ) );
+        deleteCertificateAttribute ( identity.getAttributes( ).get( "birthplace" ) );
+        deleteCertificateAttribute ( identity.getAttributes( ).get( "birthcountry" ) );
+        deleteCertificateAttribute ( identity.getAttributes( ).get( "gender" ) );
+        deleteCertificateAttribute ( identity.getAttributes( ).get( "first_name" ) );
+        deleteCertificateAttribute ( identity.getAttributes( ).get( "family_name" ) );
+        deleteCertificateAttribute ( identity.getAttributes( ).get( "fc_gender" ) );
+        deleteCertificateAttribute ( identity.getAttributes( ).get( "fc_given_name" ) );
+        deleteCertificateAttribute ( identity.getAttributes( ).get( "fc_family_name" ) );
+        deleteCertificateAttribute ( identity.getAttributes( ).get( "fc_birthdate" ) );
+        deleteCertificateAttribute ( identity.getAttributes( ).get( "fc_birthplace" ) );
+        deleteCertificateAttribute ( identity.getAttributes( ).get( "fc_birthcountry" ) );
+
+        identityChange.setIdentity( identity );
+        author.setApplicationCode( CLIENT_CODE );
+        
+        identityChange.setAuthor( author );
+        
+        identityService.updateIdentity( identityChange, null );
+    }
+    
+    /**
+     * Drop the certificate of an attribute
+     * @param attribute the attribute to drop the certificate
+     */
+    private void deleteCertificateAttribute( AttributeDto attribute )
+    {
+        if ( attribute != null  
+                && attribute.getCertificate( ) !=null 
+                && attribute.getCertificate( ).getCertifierCode( ).equals( CERTIFIER_CODE ) )
+        {
+            attribute.setCertificate( null );
+            attribute.setValue( StringUtils.EMPTY );
+        }
     }
 }

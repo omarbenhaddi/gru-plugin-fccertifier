@@ -1,0 +1,24 @@
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <h3>#i18n{fccertifier.recertify_delete_certification.pageTitle}</h3>
+        <form action="jsp/site/Portal.jsp" method="post" >
+            <input type="hidden" name="page" value="fccertifier" />
+            <input type="hidden" name="view" value="home" />
+            <p>#i18n{fccertifier.recertify.description}</p>
+            <button class="btn btn-primary" type="submit">
+                #i18n{fccertifier.recertify.ok}
+            </button>
+        </form>
+        <form action="jsp/site/Portal.jsp" method="post" >
+            <input type="hidden" name="page" value="fccertifier" />
+            <input type="hidden" name="view" value="confirmDeleteCertificate" />
+            <p>#i18n{fccertifier.delete_certification.description}</p>
+            <button class="btn btn-primary" type="submit">
+                #i18n{fccertifier.delete_certification.ok}
+            </button>
+        </form>
+        <a class="btn btn-default" href="${jsp_mydashboard}" role="button">
+            #i18n{fccertifier.recertify_delete_certification.cancel}
+        </a>
+    </div>
+</div>
