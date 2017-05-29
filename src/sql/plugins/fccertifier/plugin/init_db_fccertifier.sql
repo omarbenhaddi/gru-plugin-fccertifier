@@ -36012,7 +36012,7 @@ INSERT INTO fccertifier_insee_communes ( code_commune, nom_commune ) VALUES( "31
 INSERT INTO fccertifier_insee_communes ( code_commune, nom_commune ) VALUES( "31102" , "CAMBIAC" );
 INSERT INTO fccertifier_insee_communes ( code_commune, nom_commune ) VALUES( "31128" , "CAUJAC" );
 
-
+INSERT INTO fccertifier_insee_pays ( code_pays, nom_pays ) VALUES ( "99100", "FRANCE" );
 INSERT INTO fccertifier_insee_pays ( code_pays, nom_pays ) VALUES ( "99125", "ALBANIE" );
 INSERT INTO fccertifier_insee_pays ( code_pays, nom_pays ) VALUES ( "99109", "ALLEMAGNE" );
 INSERT INTO fccertifier_insee_pays ( code_pays, nom_pays ) VALUES ( "99130", "ANDORRE" );
