@@ -13,10 +13,7 @@
         <property name="scope">
             <set value-type="java.lang.String">
                 <value>openid</value>
-                <value>profile</value>
-                <value>email</value>
-                <value>address</value>
-                <value>phone</value>
+                <value>identite_pivot</value>
             </set>
         </property>
     </bean>

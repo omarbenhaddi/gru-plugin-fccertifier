@@ -71,22 +71,9 @@ public class FcIdentity extends UserInfo
         setPhoneNumberVerified( userInfo.getPhoneNumberVerified( ) );
         setPreferredUsername( userInfo.getPreferredUsername( ) );
 
-        // FIXME
-        if ( getBirthPlace( ) == null )
-        {
-            setBirthPlace( "67482" );
-        }
-
         _strIdsBirthDate = DateUtils.convertFcToIds( getBirthDate( ) );
         _strIdsBirthPlace = InseeUtils.getPlaceName( getBirthPlace( ) );
-        if ( _strIdsBirthDate != null && !_strIdsBirthDate.equals( "" ) )
-        {
-            _strIdsBirthCountry = "FRANCE";
-        }
-        else
-        {
-            _strIdsBirthCountry = InseeUtils.getCountryName( getBirthCountry( ) );
-        }
+        _strIdsBirthCountry = InseeUtils.getCountryName( getBirthCountry( ) );
 
     }
 
