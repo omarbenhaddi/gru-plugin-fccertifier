@@ -1,28 +1,28 @@
-
-#Plugin FranceConnect Certificateur (fccertifier)
+![](http://dev.lutece.paris.fr/jenkins/buildStatus/icon?job=gru-plugin-fccertifier-deploy)
+# Plugin FranceConnect Certificateur (fccertifier)
 
 ![](http://dev.lutece.paris.fr/plugins/plugin-fccertifier/images/franceconnect.png)
 
-##Introduction
+## Introduction
 
-Ce plugin permet de certifier dans IdentityStore les attributs d'état civil d'un usager.
+Ce plugin permet de certifier dans IdentityStore les attributs d'Ã©tat civil d'un usager.
 
-Il propose à l'usager de se connecter à un fournisseur d'identité FranceConnect afin de récupérer (avec son consentement) lesinformations certifiés de son état civil.
+Il propose Ã  l'usager de se connecter Ã  un fournisseur d'identitÃ© FranceConnect afin de rÃ©cupÃ©rer (avec son consentement) lesinformations certifiÃ©es de son Ã©tat civil.
  
 * Genre (gender)
 * Nom de naissance (family_name)
-* Prénoms (given_name)
+* PrÃ©noms (given_name)
 * Date de naissance (birthdate)
 * Lieu de naissance (birthplace)
 * Pays de naissance (birthcountry)
 
 
-##Configuration
+## Configuration
 
-Sont à configurer dans le fichier contexte :
+Sont Ã  configurer dans le fichier contexte :
  
-* Le paramétrage du module client FranceConnect
-* Le paramétrage du module client IdentityStore
+* Le paramÃ©trage du module client FranceConnect (plugin-franceconnect)
+* Le paramÃ©trage du module client IdentityStore (library-identitystore)
 
 
 
