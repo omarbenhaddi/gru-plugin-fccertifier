@@ -41,6 +41,7 @@ import fr.paris.lutece.plugins.identitystore.web.rs.dto.AuthorDto;
 import fr.paris.lutece.plugins.identitystore.web.rs.dto.CertificateDto;
 import fr.paris.lutece.plugins.identitystore.web.rs.dto.IdentityChangeDto;
 import fr.paris.lutece.plugins.identitystore.web.rs.dto.IdentityDto;
+import fr.paris.lutece.plugins.identitystore.web.service.AuthorType;
 import fr.paris.lutece.plugins.identitystore.web.service.IdentityService;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.security.SecurityService;
@@ -50,6 +51,7 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import java.io.Serializable;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -170,9 +172,11 @@ public class CertifierService implements Serializable
 
         AuthorDto author = new AuthorDto( );
         author.setApplicationCode( CLIENT_CODE );
+        author.setType( AuthorType.TYPE_USER_OWNER.getTypeValue( ) );
+        author.setId( AuthorDto.USER_DEFAULT_ID );
         identityChange.setAuthor( author );
 
-        identityService.certifyAttributes( identityChange, CERTIFIER_CODE );
+        identityService.updateIdentity( identityChange, new HashMap<>( ) );
     }
 
     /**
@@ -186,6 +190,9 @@ public class CertifierService implements Serializable
         AttributeDto attribute = new AttributeDto( );
         attribute.setKey( strKey );
         attribute.setValue( strValue );
+        CertificateDto certificateDto = new CertificateDto( );
+        certificateDto.setCertifierCode( CERTIFIER_CODE );
+        attribute.setCertificate( certificateDto );
         map.put( attribute.getKey( ), attribute );
     }
 
@@ -341,6 +348,8 @@ public class CertifierService implements Serializable
 
         identityChange.setIdentity( identity );
         author.setApplicationCode( CLIENT_CODE );
+        author.setType( AuthorType.TYPE_USER_OWNER.getTypeValue( ) );
+        author.setId( AuthorDto.USER_DEFAULT_ID );
         
         identityChange.setAuthor( author );
         
