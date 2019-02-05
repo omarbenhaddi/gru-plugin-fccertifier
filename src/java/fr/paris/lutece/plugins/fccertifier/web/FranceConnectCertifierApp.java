@@ -39,7 +39,7 @@ import fr.paris.lutece.plugins.fccertifier.service.CertifierService;
 import fr.paris.lutece.plugins.fccertifier.service.CertifierService.ValidationResult;
 import fr.paris.lutece.plugins.franceconnect.oidc.UserInfo;
 import fr.paris.lutece.plugins.franceconnect.service.DataClientService;
-import fr.paris.lutece.plugins.identitystore.web.rs.dto.IdentityDto;
+import fr.paris.lutece.plugins.identitystore.v2.web.rs.dto.IdentityDto;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.portal.service.security.UserNotSignedException;

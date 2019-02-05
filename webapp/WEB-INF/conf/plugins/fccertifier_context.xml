@@ -19,12 +19,12 @@
     </bean>
     
      <!-- IdentityStore -->
-    <bean id="fccertifier.identitystore.httpTransport" class="fr.paris.lutece.plugins.identitystore.web.rs.service.IdentityTransportRest">
+    <bean id="fccertifier.identitystore.httpTransport" class="fr.paris.lutece.plugins.identitystore.v2.web.rs.service.IdentityTransportRest">
         <property name="IdentityStoreEndPoint">
             <value>http://localhost:8080/lutece/rest/identitystore</value>
         </property>
     </bean>       
-    <bean id="fccertifier.identitystore.service" class="fr.paris.lutece.plugins.identitystore.web.service.IdentityService">
+    <bean id="fccertifier.identitystore.service" class="fr.paris.lutece.plugins.identitystore.v2.web.service.IdentityService">
         <constructor-arg ref="mydashboard-identity.identitystore.httpTransport"/>
     </bean>
     
