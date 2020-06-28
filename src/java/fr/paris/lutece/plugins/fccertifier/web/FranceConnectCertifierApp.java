@@ -33,17 +33,21 @@
  */
 package fr.paris.lutece.plugins.fccertifier.web;
 
-import fr.paris.lutece.plugins.fccertifier.dataclient.UserDataClient;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import fr.paris.lutece.plugins.fccertifier.business.FcIdentity;
+import fr.paris.lutece.plugins.fccertifier.dataclient.UserDataClient;
 import fr.paris.lutece.plugins.fccertifier.service.CertifierService;
 import fr.paris.lutece.plugins.fccertifier.service.CertifierService.ValidationResult;
-import fr.paris.lutece.plugins.franceconnect.oidc.UserInfo;
-import fr.paris.lutece.plugins.franceconnect.service.DataClientService;
 import fr.paris.lutece.plugins.identitystore.v2.web.rs.dto.IdentityDto;
+import fr.paris.lutece.plugins.oauth2.modules.franceconnect.business.UserInfo;
+import fr.paris.lutece.plugins.oauth2.modules.franceconnect.business.service.FranceConnectService;
+import fr.paris.lutece.plugins.oauth2.service.DataClientService;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.portal.service.security.UserNotSignedException;
-import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.Action;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
@@ -51,10 +55,6 @@ import fr.paris.lutece.portal.util.mvc.xpage.MVCApplication;
 import fr.paris.lutece.portal.util.mvc.xpage.annotations.Controller;
 import fr.paris.lutece.portal.web.l10n.LocaleService;
 import fr.paris.lutece.portal.web.xpages.XPage;
-
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * FranceConnect Certifier App
@@ -140,7 +140,7 @@ public class FranceConnectCertifierApp extends MVCApplication
     {
         checkUserAuthentication( request );
 
-        String strUrl = DataClientService.instance( ).getDataClientUrl( DATACLIENT_USER );
+        String strUrl = FranceConnectService.getFranceConnectDataClientUrl(request, DATACLIENT_USER );
         return redirect( request, strUrl );
     }
 

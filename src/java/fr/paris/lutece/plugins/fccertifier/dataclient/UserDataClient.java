@@ -33,20 +33,20 @@
  */
 package fr.paris.lutece.plugins.fccertifier.dataclient;
 
-import fr.paris.lutece.plugins.fccertifier.web.FranceConnectCertifierApp;
-import fr.paris.lutece.plugins.franceconnect.oidc.Token;
-import fr.paris.lutece.plugins.franceconnect.oidc.UserInfo;
-import fr.paris.lutece.plugins.franceconnect.oidc.dataclient.AbstractDataClient;
-import fr.paris.lutece.plugins.franceconnect.service.MapperService;
-import fr.paris.lutece.portal.service.util.AppLogService;
-import fr.paris.lutece.portal.service.util.AppPathService;
-import fr.paris.lutece.portal.util.mvc.utils.MVCUtils;
-import fr.paris.lutece.util.url.UrlItem;
-
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import fr.paris.lutece.plugins.fccertifier.web.FranceConnectCertifierApp;
+import fr.paris.lutece.plugins.oauth2.business.Token;
+import fr.paris.lutece.plugins.oauth2.dataclient.AbstractDataClient;
+import fr.paris.lutece.plugins.oauth2.modules.franceconnect.business.UserInfo;
+import fr.paris.lutece.plugins.oauth2.service.MapperService;
+import fr.paris.lutece.portal.service.util.AppLogService;
+import fr.paris.lutece.portal.service.util.AppPathService;
+import fr.paris.lutece.portal.util.mvc.utils.MVCUtils;
+import fr.paris.lutece.util.url.UrlItem;
 
 /**
  * UserDataClient

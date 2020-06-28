@@ -37,7 +37,7 @@ package fr.paris.lutece.plugins.fccertifier.business;
 
 import fr.paris.lutece.plugins.fccertifier.util.DateUtils;
 import fr.paris.lutece.plugins.fccertifier.util.InseeUtils;
-import fr.paris.lutece.plugins.franceconnect.oidc.UserInfo;
+import fr.paris.lutece.plugins.oauth2.modules.franceconnect.business.UserInfo;
 
 /**
  * FcIdentity

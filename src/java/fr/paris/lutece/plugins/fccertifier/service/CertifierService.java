@@ -34,8 +34,19 @@
 
 package fr.paris.lutece.plugins.fccertifier.service;
 
+import java.io.Serializable;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.fccertifier.business.FcIdentity;
-import fr.paris.lutece.plugins.franceconnect.oidc.UserInfo;
 import fr.paris.lutece.plugins.identitystore.v2.web.rs.dto.AttributeDto;
 import fr.paris.lutece.plugins.identitystore.v2.web.rs.dto.AuthorDto;
 import fr.paris.lutece.plugins.identitystore.v2.web.rs.dto.CertificateDto;
@@ -43,21 +54,12 @@ import fr.paris.lutece.plugins.identitystore.v2.web.rs.dto.IdentityChangeDto;
 import fr.paris.lutece.plugins.identitystore.v2.web.rs.dto.IdentityDto;
 import fr.paris.lutece.plugins.identitystore.v2.web.service.AuthorType;
 import fr.paris.lutece.plugins.identitystore.v2.web.service.IdentityService;
+import fr.paris.lutece.plugins.oauth2.modules.franceconnect.business.UserInfo;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.portal.service.security.UserNotSignedException;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
-import java.io.Serializable;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import org.apache.commons.lang.StringUtils;
 
 /**
  * FranceConnect Certifier Service
@@ -177,6 +179,15 @@ public class CertifierService implements Serializable
         identityChange.setAuthor( author );
 
         identityService.updateIdentity( identityChange, new HashMap<>( ) );
+        //get Certifier Listener
+        List<ICertifierListener> listCertifyListener=SpringContextService.getBeansOfType(ICertifierListener.class);
+        if(listCertifyListener!=null)
+        {
+        	//Notify listener for new certify user
+        	listCertifyListener.forEach(x->x.addCertifiedUser(infos));
+        	
+        }
+        
     }
 
     /**
@@ -354,6 +365,17 @@ public class CertifierService implements Serializable
         identityChange.setAuthor( author );
         
         identityService.updateIdentity( identityChange, null );
+        
+        List<ICertifierListener> listCertifyListener=SpringContextService.getBeansOfType(ICertifierListener.class);
+        if(listCertifyListener!=null)
+        {
+        	//Notify listener for new certify user
+        	listCertifyListener.forEach(x->x.removeCertifiedUser(strConnectionId));
+        	
+        }
+        
+        
+        
     }
     
     /**
