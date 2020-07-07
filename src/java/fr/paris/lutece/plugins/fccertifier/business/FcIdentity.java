@@ -70,6 +70,7 @@ public class FcIdentity extends UserInfo
         setPhoneNumber( userInfo.getPhoneNumber( ) );
         setPhoneNumberVerified( userInfo.getPhoneNumberVerified( ) );
         setPreferredUsername( userInfo.getPreferredUsername( ) );
+        setSub( userInfo.getSub( ) );
 
         _strIdsBirthDate = DateUtils.convertFcToIds( getBirthDate( ) );
         _strIdsBirthPlace = InseeUtils.getPlaceName( getBirthPlace( ) );

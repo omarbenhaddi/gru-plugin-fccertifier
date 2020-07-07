@@ -44,12 +44,12 @@ public interface ICertifierListener {
 	 *
 	 * @param validationInfos the validation infos
 	 */
-	void addCertifiedUser(ValidationInfos validationInfos);
+	void addCertifiedUser( ValidationInfos validationInfos );
 	
 	/**
 	 * Removes the certified user.
 	 *
 	 * @param strUserName the user name
 	 */
-	void removeCertifiedUser(String strUserName);
+	void removeCertifiedUser( String strUserName );
 }
