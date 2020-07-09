@@ -390,6 +390,7 @@ public class CertifierService implements Serializable
         {
             attribute.setCertificate( null );
             attribute.setValue( StringUtils.EMPTY );
+            attribute.setCertified(false);
         }
     }
 }
