@@ -146,7 +146,7 @@ public class CertifierService implements Serializable
      * Certify attributes
      * @param infos Validation infos
      */
-    private void certify( ValidationInfos infos )
+    public void certify( ValidationInfos infos )
     {
         IdentityService identityService = SpringContextService.getBean( BEAN_IDENTITYSTORE_SERVICE );
 
