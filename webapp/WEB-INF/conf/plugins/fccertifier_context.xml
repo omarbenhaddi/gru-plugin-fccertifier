@@ -25,7 +25,7 @@
         </property>
     </bean>       
     <bean id="fccertifier.identitystore.service" class="fr.paris.lutece.plugins.identitystore.v2.web.service.IdentityService">
-        <constructor-arg ref="mydashboard-identity.identitystore.httpTransport"/>
+        <constructor-arg ref="fccertifier.identitystore.httpTransport"/>
     </bean>
     
     
