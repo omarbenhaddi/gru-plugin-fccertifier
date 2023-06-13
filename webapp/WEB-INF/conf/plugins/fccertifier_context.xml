@@ -17,15 +17,17 @@
             </set>
         </property>
     </bean>
+ 
+    <!-- IdentityService impl -->
+    <bean id="fccertifier.identitystore.service" class="fr.paris.lutece.plugins.identitystore.v3.web.service.IdentityService">
+        <constructor-arg ref="fccertifier.identitystore.httpAccess"/>
+    </bean>
     
-     <!-- IdentityStore -->
-    <bean id="fccertifier.identitystore.httpTransport" class="fr.paris.lutece.plugins.identitystore.v2.web.rs.service.IdentityTransportRest">
+   	<!-- IHttpTransportProvider declarations -->
+    <bean id="fccertifier.identitystore.httpAccess" class="fr.paris.lutece.plugins.identitystore.v3.web.rs.service.ServiceContractTransportRest">
         <property name="IdentityStoreEndPoint">
             <value>http://localhost:8080/lutece/rest/identitystore</value>
         </property>
-    </bean>       
-    <bean id="fccertifier.identitystore.service" class="fr.paris.lutece.plugins.identitystore.v2.web.service.IdentityService">
-        <constructor-arg ref="fccertifier.identitystore.httpTransport"/>
     </bean>
     
     

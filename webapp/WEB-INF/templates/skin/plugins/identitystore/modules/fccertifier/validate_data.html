@@ -1,3 +1,19 @@
+<#function getAttributeValue identity attributeName>
+	<#if identity?? && identity.attributes?? && identity.attributes?has_content >
+		<#list identity.attributes as attribute>
+			<#if attribute?? && attribute.key?? && attribute.key == attributeName >
+				<#return attribute.value>
+			</#if>
+		</#list>
+	</#if>
+</#function>
+<#assign gender = getAttributeValue(identity, "gender") />
+<#assign first_name = getAttributeValue(identity, "first_name") />
+<#assign family_name = getAttributeValue(identity, "family_name") />
+<#assign birthdate = getAttributeValue(identity, "birthdate") />
+<#assign birthplace = getAttributeValue(identity, "birthplace") />
+<#assign birthcountry = getAttributeValue(identity, "birthcountry") />
+
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
         <@rowBox>
@@ -22,8 +38,8 @@
                 <tr>
                     <td>#i18n{fccertifier.validate_data.gender}</td>
                     <td>
-                        <#if identity.attributes.gender??>
-                            <#switch identity.attributes.gender >
+                        <#if gender??>
+                            <#switch gender >
                                 <#case "2">#i18n{fccertifier.validate_data.gender.male}
                                 <#break>
                                 <#case "1">#i18n{fccertifier.validate_data.gender.female}
@@ -47,7 +63,7 @@
                 <tr>
                     <td>#i18n{fccertifier.validate_data.firstName}</td>
                     <td>
-                        ${identity.attributes.first_name.value!''}
+                        ${first_name!''}
                     </td>
                     <td>
                         ${fc_infos.givenName!''}
@@ -56,7 +72,7 @@
                 <tr>
                     <td>#i18n{fccertifier.validate_data.lastName}</td>
                     <td>
-                        ${identity.attributes.family_name.value!''}
+                        ${family_name!''}
                     </td>
                     <td>
                         ${fc_infos.familyName!''}
@@ -65,7 +81,7 @@
                 <tr>
                     <td>#i18n{fccertifier.validate_data.birthDate}</td>
                     <td>
-                        ${identity.attributes.birthdate.value!''}
+                        ${birthdate!''}
                     </td>
                     <td>
                         ${fc_infos.idsBirthDate!''}
@@ -74,7 +90,7 @@
                 <tr>
                     <td>#i18n{fccertifier.validate_data.birthPlace}</td>
                     <td>
-                        ${identity.attributes.birthplace.value!''}
+                        ${birthplace!''}
                     </td>
                     <td>
                         ${fc_infos.idsBirthPlace!''}
@@ -83,7 +99,7 @@
                 <tr>
                     <td>#i18n{fccertifier.validate_data.birthCountry}</td>
                     <td>
-                        ${identity.attributes.birthcountry.value!''}
+                        ${birthcountry!''}
                     </td>
                     <td>
                         ${fc_infos.birthcountry!'#i18n{fccertifier.validate_data.France}'}
