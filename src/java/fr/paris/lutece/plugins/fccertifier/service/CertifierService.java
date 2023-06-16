@@ -52,6 +52,8 @@ import fr.paris.lutece.plugins.identitystore.v3.web.rs.dto.common.RequestAuthor;
 import fr.paris.lutece.plugins.identitystore.v3.web.rs.dto.crud.CertifiedAttribute;
 import fr.paris.lutece.plugins.identitystore.v3.web.rs.dto.crud.Identity;
 import fr.paris.lutece.plugins.identitystore.v3.web.rs.dto.crud.IdentityChangeRequest;
+import fr.paris.lutece.plugins.identitystore.v3.web.rs.dto.crud.IdentityChangeResponse;
+import fr.paris.lutece.plugins.identitystore.v3.web.rs.dto.crud.IdentityChangeStatus;
 import fr.paris.lutece.plugins.identitystore.v3.web.rs.dto.search.IdentitySearchResponse;
 import fr.paris.lutece.plugins.identitystore.v3.web.rs.dto.search.QualifiedIdentity;
 import fr.paris.lutece.plugins.identitystore.v3.web.service.IdentityService;
@@ -86,7 +88,9 @@ public class CertifierService implements Serializable
     private static final int EXPIRES_DELAY = AppPropertiesService.getPropertyInt( PROPERTY_EXPIRES_DELAY, DEFAULT_EXPIRES_DELAY );
     private static final String BEAN_IDENTITYSTORE_SERVICE = "fccertifier.identitystore.service";
     private static final String PROPERTY_IDENTITY_SERVICE_CLIENT_CODE = "fccertifier.identitystore.client.code";
-    private static final String CERTIFIER_CODE = "FC";
+    private static final String CERTIFIER_CODE = "fccertifier";
+    private static final String CERTIFIER_CODE_DEFAULT = "DEC";
+    
     private static final String CLIENT_CODE = AppPropertiesService.getProperty( PROPERTY_IDENTITY_SERVICE_CLIENT_CODE );
 
     private static Map<String, ValidationInfos> _mapValidationInfos = new ConcurrentHashMap<String, ValidationInfos>( );
@@ -154,124 +158,112 @@ public class CertifierService implements Serializable
     {
         IdentityService identityService = SpringContextService.getBean( BEAN_IDENTITYSTORE_SERVICE );
 
-        IdentityChangeRequest identityChangeRequest = new IdentityChangeRequest( );
-
-        Identity identity = new Identity( );
-        identity.setConnectionId( infos.getUserConnectionId( ) );
-
-        List<CertifiedAttribute> listCertifiedAttribute = new ArrayList<>();
-                
-        FcIdentity user = infos.getFCUserInfo( );
+        QualifiedIdentity identityStore  =getIdentity(infos.getUserConnectionId());
         
-        Date date = new Date( );
-        
-        CertifiedAttribute certifiedAttribute = new CertifiedAttribute( );        
-        certifiedAttribute.setKey( "birthdate" );
-        certifiedAttribute.setValue( user.getIdsBirthDate( ) );
-        certifiedAttribute.setCertificationProcess( CERTIFIER_CODE );
-        certifiedAttribute.setCertificationDate( date );
-        listCertifiedAttribute.add( certifiedAttribute );
-        
-        certifiedAttribute = new CertifiedAttribute( );
-        certifiedAttribute.setKey( "birthplace" );
-        certifiedAttribute.setValue( user.getIdsBirthPlace( ) );
-        certifiedAttribute.setCertificationProcess( CERTIFIER_CODE );
-        certifiedAttribute.setCertificationDate( date );
-        listCertifiedAttribute.add( certifiedAttribute );       
-
-        certifiedAttribute = new CertifiedAttribute( );
-        certifiedAttribute.setKey( "birthcountry" );
-        certifiedAttribute.setValue( user.getIdsBirthCountry( ) );
-        certifiedAttribute.setCertificationProcess( CERTIFIER_CODE );
-        certifiedAttribute.setCertificationDate( date );
-        listCertifiedAttribute.add( certifiedAttribute );      
-        
-        certifiedAttribute = new CertifiedAttribute( );
-        certifiedAttribute.setKey( "gender" );
-        certifiedAttribute.setValue( user.getIdsGender( ) );
-        certifiedAttribute.setCertificationProcess( CERTIFIER_CODE );
-        certifiedAttribute.setCertificationDate( date );
-        listCertifiedAttribute.add( certifiedAttribute );     
-        
-        certifiedAttribute = new CertifiedAttribute( );
-        certifiedAttribute.setKey( "first_name" );
-        certifiedAttribute.setValue( user.getGivenName( ) );
-        certifiedAttribute.setCertificationProcess( CERTIFIER_CODE );
-        certifiedAttribute.setCertificationDate( date );
-        listCertifiedAttribute.add( certifiedAttribute );   
-  
-        certifiedAttribute = new CertifiedAttribute( );
-        certifiedAttribute.setKey( "family_name" );
-        certifiedAttribute.setValue( user.getFamilyName( ) );
-        certifiedAttribute.setCertificationProcess( CERTIFIER_CODE );
-        certifiedAttribute.setCertificationDate( date );
-        listCertifiedAttribute.add( certifiedAttribute );  
-  
-        certifiedAttribute = new CertifiedAttribute( );
-        certifiedAttribute.setKey( "fc_gender" );
-        certifiedAttribute.setValue( user.getGender( ) );
-        certifiedAttribute.setCertificationProcess( CERTIFIER_CODE );
-        certifiedAttribute.setCertificationDate( date );
-        listCertifiedAttribute.add( certifiedAttribute );  
-  
-        certifiedAttribute = new CertifiedAttribute( );
-        certifiedAttribute.setKey( "fc_given_name" );
-        certifiedAttribute.setValue( user.getGivenName( ) );
-        certifiedAttribute.setCertificationProcess( CERTIFIER_CODE );
-        certifiedAttribute.setCertificationDate( date );
-        listCertifiedAttribute.add( certifiedAttribute );  
- 
-        certifiedAttribute = new CertifiedAttribute( );
-        certifiedAttribute.setKey( "fc_family_name" );
-        certifiedAttribute.setValue( user.getFamilyName( ) );
-        certifiedAttribute.setCertificationProcess( CERTIFIER_CODE );
-        certifiedAttribute.setCertificationDate( date );
-        listCertifiedAttribute.add( certifiedAttribute );  
-  
-        certifiedAttribute = new CertifiedAttribute( );
-        certifiedAttribute.setKey( "fc_birthdate" );
-        certifiedAttribute.setValue( user.getBirthDate( ) );
-        certifiedAttribute.setCertificationProcess( CERTIFIER_CODE );
-        certifiedAttribute.setCertificationDate( date );
-        listCertifiedAttribute.add( certifiedAttribute );
-  
-        certifiedAttribute = new CertifiedAttribute( );
-        certifiedAttribute.setKey( "fc_birthplace" );
-        certifiedAttribute.setValue( user.getBirthPlace( ) );
-        certifiedAttribute.setCertificationProcess( CERTIFIER_CODE );
-        certifiedAttribute.setCertificationDate( date );
-        listCertifiedAttribute.add( certifiedAttribute );
- 
-        certifiedAttribute = new CertifiedAttribute( );
-        certifiedAttribute.setKey( "fc_birthcountry" );
-        certifiedAttribute.setValue( user.getBirthPlace( ) );
-        certifiedAttribute.setCertificationProcess( CERTIFIER_CODE );
-        certifiedAttribute.setCertificationDate( date );
-        listCertifiedAttribute.add( certifiedAttribute );
-        
-        identity.setAttributes( listCertifiedAttribute );
-
-        
-        RequestAuthor author = new RequestAuthor( );
-        author.setName( CLIENT_CODE );
-        author.setType( AuthorType.application );
-       
-        identityChangeRequest.setIdentity( identity );
-        identityChangeRequest.setOrigin( author );
-        
-        try
-        {   
-            identityService.updateIdentity( infos.getUserConnectionId( ), identityChangeRequest, CLIENT_CODE );
-        } catch ( AppException | IdentityStoreException e )
+        if(identityStore!=null)
+        	
         {
-            AppLogService.error( "Error updating identity for {}", e.getMessage( ), infos.getUserConnectionId( ) );
-        }
-        //get Certifier Listener
-        List<ICertifierListener> listCertifyListener=SpringContextService.getBeansOfType(ICertifierListener.class);
-        if(listCertifyListener!=null)
+        
+        
+	        IdentityChangeRequest identityChangeRequest = new IdentityChangeRequest( );
+	
+	        Identity identity = new Identity( );
+	        identity.setCustomerId(identityStore.getConnectionId());
+	
+	        List<CertifiedAttribute> listCertifiedAttribute = new ArrayList<>();
+	                
+	        FcIdentity user = infos.getFCUserInfo( );
+	        
+	        Date date = new Date( );
+	        
+	        CertifiedAttribute certifiedAttribute = new CertifiedAttribute( );        
+	        certifiedAttribute.setKey( "birthdate" );
+	        certifiedAttribute.setValue( user.getIdsBirthDate( ) );
+	        certifiedAttribute.setCertificationProcess( CERTIFIER_CODE );
+	        certifiedAttribute.setCertificationDate( date );
+	        listCertifiedAttribute.add( certifiedAttribute );
+	        
+	        certifiedAttribute = new CertifiedAttribute( );
+	        certifiedAttribute.setKey( "birthplace_code" );
+	        certifiedAttribute.setValue( user.getBirthPlace( ) );
+	        certifiedAttribute.setCertificationProcess( CERTIFIER_CODE );
+	        certifiedAttribute.setCertificationDate( date );
+	        listCertifiedAttribute.add( certifiedAttribute );       
+	
+	        certifiedAttribute = new CertifiedAttribute( );
+	        certifiedAttribute.setKey( "birthcountry_code" );
+	        certifiedAttribute.setValue( user.getBirthCountry()  );
+	        certifiedAttribute.setCertificationProcess( CERTIFIER_CODE );
+	        certifiedAttribute.setCertificationDate( date );
+	        listCertifiedAttribute.add( certifiedAttribute );      
+	        
+	        certifiedAttribute = new CertifiedAttribute( );
+	        certifiedAttribute.setKey( "gender" );
+	        certifiedAttribute.setValue( user.getIdsGender( ) );
+	        certifiedAttribute.setCertificationProcess( CERTIFIER_CODE );
+	        certifiedAttribute.setCertificationDate( date );
+	        listCertifiedAttribute.add( certifiedAttribute );     
+	        
+	        certifiedAttribute = new CertifiedAttribute( );
+	        certifiedAttribute.setKey( "first_name" );
+	        certifiedAttribute.setValue( user.getGivenName( ) );
+	        certifiedAttribute.setCertificationProcess( CERTIFIER_CODE );
+	        certifiedAttribute.setCertificationDate( date );
+	        listCertifiedAttribute.add( certifiedAttribute );   
+	  
+	        certifiedAttribute = new CertifiedAttribute( );
+	        certifiedAttribute.setKey( "family_name" );
+	        certifiedAttribute.setValue( user.getFamilyName( ) );
+	        certifiedAttribute.setCertificationProcess( CERTIFIER_CODE );
+	        certifiedAttribute.setCertificationDate( date );
+	        listCertifiedAttribute.add( certifiedAttribute );  
+	  
+	        certifiedAttribute = new CertifiedAttribute( );
+	        certifiedAttribute.setKey( "preferred_username" );
+	        certifiedAttribute.setValue( user.getPreferredUsername() );
+	        certifiedAttribute.setCertificationProcess( CERTIFIER_CODE_DEFAULT );
+	        certifiedAttribute.setCertificationDate( date );
+	        listCertifiedAttribute.add( certifiedAttribute );  
+	  
+	        
+	        
+	        identity.setAttributes( listCertifiedAttribute );
+	
+	        
+	        RequestAuthor author = new RequestAuthor( );
+	        author.setName( CLIENT_CODE );
+	        author.setType( AuthorType.application );
+	       
+	        identityChangeRequest.setIdentity( identity );
+	        identityChangeRequest.setOrigin( author );
+	        
+	        try
+	        {   
+	        	
+	            final IdentityChangeResponse response= identityService.updateIdentity( identityStore.getCustomerId(), identityChangeRequest, CLIENT_CODE );
+	            if (response==null || ! IdentityChangeStatus.UPDATE_SUCCESS.equals(  response.getStatus())  )
+	        	  {
+	        		  AppLogService.error( "Error when  updating the identity for connectionId {} the idantity change status is {} ", identity.getConnectionId( ), response!=null? response.getStatus():"");
+	        		  
+	        		  throw new IdentityStoreException(response!=null ? "":response.getStatus().getLabel());
+	        	  }
+	            
+	        } catch ( AppException | IdentityStoreException e )
+	        {
+	            AppLogService.error( "Error updating identity for {}", infos.getUserConnectionId( ) ,e.getMessage( ));
+	        }
+	        //get Certifier Listener
+	        List<ICertifierListener> listCertifyListener=SpringContextService.getBeansOfType(ICertifierListener.class);
+	        if(listCertifyListener!=null)
+	        {
+	        	//Notify listener for new certify user
+	        	listCertifyListener.forEach(x->x.addCertifiedUser(infos));
+	        	
+	        }
+	       }
+        else
         {
-        	//Notify listener for new certify user
-        	listCertifyListener.forEach(x->x.addCertifiedUser(infos));
+        	AppLogService.error( "error when upadating identity information for connetion Id {}, no Identity found", infos.getUserConnectionId( ) );
         	
         }
         

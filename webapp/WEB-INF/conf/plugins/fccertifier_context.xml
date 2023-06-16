@@ -17,18 +17,20 @@
             </set>
         </property>
     </bean>
- 
+      <!-- library identitystore -->
+	<!-- IHttpTransportProvider declarations -->
+	<bean id="fccertifier.identitystore.httpAccessTransport" class="fr.paris.lutece.plugins.identitystore.v3.web.rs.service.HttpAccessTransport" >
+        <property name="ApiEndPointUrl">
+           <value>${fccertifer.identity.identitystore.ApiEndPointUrl}</value>
+        </property>
+     </bean>
+	
     <!-- IdentityService impl -->
     <bean id="fccertifier.identitystore.service" class="fr.paris.lutece.plugins.identitystore.v3.web.service.IdentityService">
-        <constructor-arg ref="fccertifier.identitystore.httpAccess"/>
+		<constructor-arg ref="fccertifier.identity.httpAccess"/>
+	</bean>
+	<bean id="fccertifier.identity.httpAccess" class="fr.paris.lutece.plugins.identitystore.v3.web.rs.service.IdentityTransportRest">
+        <constructor-arg ref="mydashboard-identity.identitystore.httpAccessTransport"/>
     </bean>
-    
-   	<!-- IHttpTransportProvider declarations -->
-    <bean id="fccertifier.identitystore.httpAccess" class="fr.paris.lutece.plugins.identitystore.v3.web.rs.service.ServiceContractTransportRest">
-        <property name="IdentityStoreEndPoint">
-            <value>http://localhost:8080/lutece/rest/identitystore</value>
-        </property>
-    </bean>
-    
     
 </beans>
