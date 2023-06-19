@@ -45,6 +45,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import fr.paris.lutece.plugins.fccertifier.business.FcIdentity;
 import fr.paris.lutece.plugins.identitystore.v3.web.rs.dto.common.AuthorType;
@@ -177,13 +178,13 @@ public class CertifierService implements Serializable
 	        Date date = new Date( );
 	        
 	      
-	        listCertifiedAttribute.add( getCertificateAttribute("birthdate",user.getIdsBirthDate( ),date ));
-	        listCertifiedAttribute.add( getCertificateAttribute("birthplace_code", user.getBirthPlace( ),date ));
-	        listCertifiedAttribute.add( getCertificateAttribute("birthcountry_code",  user.getBirthCountry(),date ));
-	        listCertifiedAttribute.add( getCertificateAttribute("gender",  user.getIdsGender( ),date ));
-	        listCertifiedAttribute.add( getCertificateAttribute("first_name", user.getGivenName( ),date ));
-	        listCertifiedAttribute.add( getCertificateAttribute("family_name", user.getFamilyName( ) ,date ));
-	        listCertifiedAttribute.add( getCertificateAttribute("preferred_username", user.getPreferredUsername() ,date,true ));
+	        addCertificateAttribute("birthdate",user.getIdsBirthDate( ),date,listCertifiedAttribute );
+	        addCertificateAttribute("birthplace_code", user.getBirthPlace( ),date ,listCertifiedAttribute );
+	        addCertificateAttribute("birthcountry_code",  user.getBirthCountry(),date,listCertifiedAttribute );
+	        addCertificateAttribute("gender",  user.getIdsGender( ),date ,listCertifiedAttribute );
+	        addCertificateAttribute("first_name", user.getGivenName( ),date ,listCertifiedAttribute );
+	        addCertificateAttribute("family_name", user.getFamilyName( ) ,date ,listCertifiedAttribute );
+	        addCertificateAttribute("preferred_username", user.getPreferredUsername() ,date,true ,listCertifiedAttribute );
 	      
 	        identity.setAttributes( listCertifiedAttribute );
 	
@@ -365,25 +366,30 @@ public class CertifierService implements Serializable
     }
     
     
-    private  CertifiedAttribute getCertificateAttribute( String strKey,String strValue,Date certDate)
+    private  void  addCertificateAttribute( String strKey,String strValue,Date certDate,List<CertifiedAttribute> listCertifiedAttribute)
     {
        
     	
-    	return getCertificateAttribute(strKey, strValue, certDate, false);
+    	addCertificateAttribute(strKey, strValue, certDate, false,listCertifiedAttribute);
     	
     }
     
     
-    private  CertifiedAttribute getCertificateAttribute( String strKey,String strValue,Date certDate,boolean bDefault)
+    private  void addCertificateAttribute( String strKey,String strValue,Date certDate,boolean bDefault,List<CertifiedAttribute> listCertifiedAttribute)
     {
     	  
-	    CertifiedAttribute certifiedAttribute = new CertifiedAttribute( );        
-        certifiedAttribute.setKey( strKey );
-        certifiedAttribute.setValue( strValue!=null? strValue:"");
-        certifiedAttribute.setCertificationProcess( bDefault?CERTIFIER_CODE_DEFAULT:CERTIFIER_CODE );
-        certifiedAttribute.setCertificationDate( certDate );
+    	if(!StringUtils.isEmpty(strValue))
+    	{
+		    CertifiedAttribute certifiedAttribute = new CertifiedAttribute( );        
+	        certifiedAttribute.setKey( strKey );
+	        certifiedAttribute.setValue( strValue!=null? strValue:"");
+	        certifiedAttribute.setCertificationProcess( bDefault?CERTIFIER_CODE_DEFAULT:CERTIFIER_CODE );
+	        certifiedAttribute.setCertificationDate( certDate );
+	        
+	        listCertifiedAttribute.add(certifiedAttribute);
+    	}
      
-       return certifiedAttribute;
+     
 	        
     }
   
