@@ -176,57 +176,15 @@ public class CertifierService implements Serializable
 	        
 	        Date date = new Date( );
 	        
-	        CertifiedAttribute certifiedAttribute = new CertifiedAttribute( );        
-	        certifiedAttribute.setKey( "birthdate" );
-	        certifiedAttribute.setValue( user.getIdsBirthDate( ) );
-	        certifiedAttribute.setCertificationProcess( CERTIFIER_CODE );
-	        certifiedAttribute.setCertificationDate( date );
-	        listCertifiedAttribute.add( certifiedAttribute );
-	        
-	        certifiedAttribute = new CertifiedAttribute( );
-	        certifiedAttribute.setKey( "birthplace_code" );
-	        certifiedAttribute.setValue( user.getBirthPlace( ) );
-	        certifiedAttribute.setCertificationProcess( CERTIFIER_CODE );
-	        certifiedAttribute.setCertificationDate( date );
-	        listCertifiedAttribute.add( certifiedAttribute );       
-	
-	        certifiedAttribute = new CertifiedAttribute( );
-	        certifiedAttribute.setKey( "birthcountry_code" );
-	        certifiedAttribute.setValue( user.getBirthCountry()  );
-	        certifiedAttribute.setCertificationProcess( CERTIFIER_CODE );
-	        certifiedAttribute.setCertificationDate( date );
-	        listCertifiedAttribute.add( certifiedAttribute );      
-	        
-	        certifiedAttribute = new CertifiedAttribute( );
-	        certifiedAttribute.setKey( "gender" );
-	        certifiedAttribute.setValue( user.getIdsGender( ) );
-	        certifiedAttribute.setCertificationProcess( CERTIFIER_CODE );
-	        certifiedAttribute.setCertificationDate( date );
-	        listCertifiedAttribute.add( certifiedAttribute );     
-	        
-	        certifiedAttribute = new CertifiedAttribute( );
-	        certifiedAttribute.setKey( "first_name" );
-	        certifiedAttribute.setValue( user.getGivenName( ) );
-	        certifiedAttribute.setCertificationProcess( CERTIFIER_CODE );
-	        certifiedAttribute.setCertificationDate( date );
-	        listCertifiedAttribute.add( certifiedAttribute );   
-	  
-	        certifiedAttribute = new CertifiedAttribute( );
-	        certifiedAttribute.setKey( "family_name" );
-	        certifiedAttribute.setValue( user.getFamilyName( ) );
-	        certifiedAttribute.setCertificationProcess( CERTIFIER_CODE );
-	        certifiedAttribute.setCertificationDate( date );
-	        listCertifiedAttribute.add( certifiedAttribute );  
-	  
-	        certifiedAttribute = new CertifiedAttribute( );
-	        certifiedAttribute.setKey( "preferred_username" );
-	        certifiedAttribute.setValue( user.getPreferredUsername() );
-	        certifiedAttribute.setCertificationProcess( CERTIFIER_CODE_DEFAULT );
-	        certifiedAttribute.setCertificationDate( date );
-	        listCertifiedAttribute.add( certifiedAttribute );  
-	  
-	        
-	        
+	      
+	        listCertifiedAttribute.add( getCertificateAttribute("birthdate",user.getIdsBirthDate( ),date ));
+	        listCertifiedAttribute.add( getCertificateAttribute("birthplace_code", user.getBirthPlace( ),date ));
+	        listCertifiedAttribute.add( getCertificateAttribute("birthcountry_code",  user.getBirthCountry(),date ));
+	        listCertifiedAttribute.add( getCertificateAttribute("gender",  user.getIdsGender( ),date ));
+	        listCertifiedAttribute.add( getCertificateAttribute("first_name", user.getGivenName( ),date ));
+	        listCertifiedAttribute.add( getCertificateAttribute("family_name", user.getFamilyName( ) ,date ));
+	        listCertifiedAttribute.add( getCertificateAttribute("preferred_username", user.getPreferredUsername() ,date,true ));
+	      
 	        identity.setAttributes( listCertifiedAttribute );
 	
 	        
@@ -404,6 +362,29 @@ public class CertifierService implements Serializable
             return _strMessageKey;
         }
 
+    }
+    
+    
+    private  CertifiedAttribute getCertificateAttribute( String strKey,String strValue,Date certDate)
+    {
+       
+    	
+    	return getCertificateAttribute(strKey, strValue, certDate, false);
+    	
+    }
+    
+    
+    private  CertifiedAttribute getCertificateAttribute( String strKey,String strValue,Date certDate,boolean bDefault)
+    {
+    	  
+	    CertifiedAttribute certifiedAttribute = new CertifiedAttribute( );        
+        certifiedAttribute.setKey( strKey );
+        certifiedAttribute.setValue( strValue!=null? strValue:"");
+        certifiedAttribute.setCertificationProcess( bDefault?CERTIFIER_CODE_DEFAULT:CERTIFIER_CODE );
+        certifiedAttribute.setCertificationDate( certDate );
+     
+       return certifiedAttribute;
+	        
     }
   
 }
