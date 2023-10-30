@@ -48,15 +48,14 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import fr.paris.lutece.plugins.fccertifier.business.FcIdentity;
+import fr.paris.lutece.plugins.identitystore.v3.web.rs.dto.common.AttributeDto;
 import fr.paris.lutece.plugins.identitystore.v3.web.rs.dto.common.AuthorType;
+import fr.paris.lutece.plugins.identitystore.v3.web.rs.dto.common.IdentityDto;
 import fr.paris.lutece.plugins.identitystore.v3.web.rs.dto.common.RequestAuthor;
-import fr.paris.lutece.plugins.identitystore.v3.web.rs.dto.crud.CertifiedAttribute;
-import fr.paris.lutece.plugins.identitystore.v3.web.rs.dto.crud.Identity;
+import fr.paris.lutece.plugins.identitystore.v3.web.rs.dto.common.ResponseStatusType;
 import fr.paris.lutece.plugins.identitystore.v3.web.rs.dto.crud.IdentityChangeRequest;
 import fr.paris.lutece.plugins.identitystore.v3.web.rs.dto.crud.IdentityChangeResponse;
-import fr.paris.lutece.plugins.identitystore.v3.web.rs.dto.crud.IdentityChangeStatus;
 import fr.paris.lutece.plugins.identitystore.v3.web.rs.dto.search.IdentitySearchResponse;
-import fr.paris.lutece.plugins.identitystore.v3.web.rs.dto.search.QualifiedIdentity;
 import fr.paris.lutece.plugins.identitystore.v3.web.service.IdentityService;
 import fr.paris.lutece.plugins.identitystore.web.exception.IdentityStoreException;
 import fr.paris.lutece.plugins.oauth2.modules.franceconnect.business.UserInfo;
@@ -159,7 +158,7 @@ public class CertifierService implements Serializable
     {
         IdentityService identityService = SpringContextService.getBean( BEAN_IDENTITYSTORE_SERVICE );
 
-        QualifiedIdentity identityStore  =getIdentity(infos.getUserConnectionId());
+        IdentityDto identityStore  =getIdentity(infos.getUserConnectionId());
         
         if(identityStore!=null)
         	
@@ -168,10 +167,10 @@ public class CertifierService implements Serializable
         
 	        IdentityChangeRequest identityChangeRequest = new IdentityChangeRequest( );
 	
-	        Identity identity = new Identity( );
+	        IdentityDto identity = new IdentityDto( );
 	        identity.setCustomerId(identityStore.getConnectionId());
 	
-	        List<CertifiedAttribute> listCertifiedAttribute = new ArrayList<>();
+	        List<AttributeDto> listCertifiedAttribute = new ArrayList<>();
 	                
 	        FcIdentity user = infos.getFCUserInfo( );
 	        
@@ -194,17 +193,17 @@ public class CertifierService implements Serializable
 	        author.setType( AuthorType.application );
 	       
 	        identityChangeRequest.setIdentity( identity );
-	        identityChangeRequest.setOrigin( author );
+	       
 	        
 	        try
 	        {   
 	        	
-	            final IdentityChangeResponse response= identityService.updateIdentity( identityStore.getCustomerId(), identityChangeRequest, CLIENT_CODE );
-	            if (response==null || ! IdentityChangeStatus.UPDATE_SUCCESS.equals(  response.getStatus())  )
+	            final IdentityChangeResponse response= identityService.updateIdentity( identityStore.getCustomerId(), identityChangeRequest, CLIENT_CODE,author);
+	            if (response == null || !ResponseStatusType.OK.equals(response.getStatus().getType())  )
 	        	  {
 	        		  AppLogService.error( "Error when  updating the identity for connectionId {} the idantity change status is {} ", identity.getConnectionId( ), response!=null? response.getStatus():"");
 	        		  
-	        		  throw new IdentityStoreException(response!=null ? "":response.getStatus().getLabel());
+	        		  throw new IdentityStoreException(response!=null ? response.getStatus().getType().name():"");
 	        	  }
 	            
 	        } catch ( AppException | IdentityStoreException e )
@@ -234,14 +233,18 @@ public class CertifierService implements Serializable
      * @param strConnectionId The connection ID
      * @return The identity
      */
-    public static QualifiedIdentity getIdentity( String strConnectionId )
+    public static IdentityDto getIdentity( String strConnectionId )
     {
         IdentityService identityService = SpringContextService.getBean( BEAN_IDENTITYSTORE_SERVICE );
 
         IdentitySearchResponse identitySearchResponse;
+        RequestAuthor  requestAuthor = new RequestAuthor(  );
+         requestAuthor.setName( CLIENT_CODE );
+        requestAuthor.setType( AuthorType.owner );
+        
         try
         {
-            identitySearchResponse = identityService.getIdentityByConnectionId( strConnectionId, CLIENT_CODE );
+            identitySearchResponse = identityService.getIdentityByConnectionId( strConnectionId, CLIENT_CODE , requestAuthor );
             
             if(  identitySearchResponse != null && !CollectionUtils.isEmpty( identitySearchResponse.getIdentities( ) ) )
             {
@@ -366,7 +369,7 @@ public class CertifierService implements Serializable
     }
     
     
-    private  void  addCertificateAttribute( String strKey,String strValue,Date certDate,List<CertifiedAttribute> listCertifiedAttribute)
+    private  void  addCertificateAttribute( String strKey,String strValue,Date certDate,List<AttributeDto> listCertifiedAttribute)
     {
        
     	
@@ -375,15 +378,15 @@ public class CertifierService implements Serializable
     }
     
     
-    private  void addCertificateAttribute( String strKey,String strValue,Date certDate,boolean bDefault,List<CertifiedAttribute> listCertifiedAttribute)
+    private  void addCertificateAttribute( String strKey,String strValue,Date certDate,boolean bDefault,List<AttributeDto> listCertifiedAttribute)
     {
     	  
     	if(!StringUtils.isEmpty(strValue))
     	{
-		    CertifiedAttribute certifiedAttribute = new CertifiedAttribute( );        
+    		AttributeDto certifiedAttribute = new AttributeDto( );        
 	        certifiedAttribute.setKey( strKey );
 	        certifiedAttribute.setValue( strValue!=null? strValue:"");
-	        certifiedAttribute.setCertificationProcess( bDefault?CERTIFIER_CODE_DEFAULT:CERTIFIER_CODE );
+	        certifiedAttribute.setCertifier( bDefault?CERTIFIER_CODE_DEFAULT:CERTIFIER_CODE );
 	        certifiedAttribute.setCertificationDate( certDate );
 	        
 	        listCertifiedAttribute.add(certifiedAttribute);

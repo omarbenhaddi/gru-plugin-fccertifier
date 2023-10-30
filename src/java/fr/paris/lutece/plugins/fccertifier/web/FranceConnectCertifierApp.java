@@ -41,7 +41,7 @@ import fr.paris.lutece.plugins.fccertifier.business.FcIdentity;
 import fr.paris.lutece.plugins.fccertifier.dataclient.UserDataClient;
 import fr.paris.lutece.plugins.fccertifier.service.CertifierService;
 import fr.paris.lutece.plugins.fccertifier.service.CertifierService.ValidationResult;
-import fr.paris.lutece.plugins.identitystore.v3.web.rs.dto.search.QualifiedIdentity;
+import fr.paris.lutece.plugins.identitystore.v3.web.rs.dto.common.IdentityDto;
 import fr.paris.lutece.plugins.oauth2.modules.franceconnect.business.UserInfo;
 import fr.paris.lutece.plugins.oauth2.modules.franceconnect.business.service.FranceConnectService;
 import fr.paris.lutece.portal.service.security.LuteceUser;
@@ -153,7 +153,7 @@ public class FranceConnectCertifierApp extends MVCApplication
         Map<String, Object> model = getModel( );
 
         UserInfo fcUserInfo = (UserInfo) request.getSession( ).getAttribute( UserDataClient.ATTRIBUTE_USERINFO );
-        QualifiedIdentity identity = CertifierService.getIdentity( user.getName( ) );
+        IdentityDto identity = CertifierService.getIdentity( user.getName( ) );
 
         model.put( MARK_FC_INFOS, new FcIdentity( fcUserInfo ) );
         model.put( MARK_IDENTITY, identity );
