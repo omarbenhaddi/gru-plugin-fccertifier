@@ -169,6 +169,7 @@ public class CertifierService implements Serializable
 	
 	        IdentityDto identity = new IdentityDto( );
 	        identity.setCustomerId(identityStore.getConnectionId());
+	        identity.setLastUpdateDate(identityStore.getLastUpdateDate());
 	
 	        List<AttributeDto> listCertifiedAttribute = new ArrayList<>();
 	                
