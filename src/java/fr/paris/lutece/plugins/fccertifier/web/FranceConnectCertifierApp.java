@@ -54,6 +54,7 @@ import fr.paris.lutece.portal.util.mvc.xpage.MVCApplication;
 import fr.paris.lutece.portal.util.mvc.xpage.annotations.Controller;
 import fr.paris.lutece.portal.web.l10n.LocaleService;
 import fr.paris.lutece.portal.web.xpages.XPage;
+import fr.paris.lutece.util.url.UrlItem;
 
 /**
  * FranceConnect Certifier App
@@ -87,8 +88,11 @@ public class FranceConnectCertifierApp extends MVCApplication
     
     //Properties
     private static final String PROPERTY_JSP_MYDASHBOARD = AppPropertiesService.getProperty( "fccertifier.mydashboard.identity.xpage" );
-
+    private static final String PROPERTY_SUSPICIOUS_REDIRECT_PAGE = AppPropertiesService.getProperty( "fccertifier.identity.suspicious.france_connect.redirect.page" );
+    private static final String PROPERTY_SUSPICIOUS_REDIRECT_VIEW = AppPropertiesService.getProperty( "fccertifier.identity.suspicious.france_connect.redirect.view" );
+    
     private static final String DATACLIENT_USER = "user";
+    private static final String URL_SUSPICIOUS_IDENTITY = "Portal.jsp?page=" + PROPERTY_SUSPICIOUS_REDIRECT_PAGE + "&view=" + PROPERTY_SUSPICIOUS_REDIRECT_VIEW;
     private final CertifierService _certifierService;
 
     /**
@@ -171,9 +175,15 @@ public class FranceConnectCertifierApp extends MVCApplication
     @Action( ACTION_CERTIFY )
     public XPage doCertify( HttpServletRequest request ) throws UserNotSignedException
     {
-        checkUserAuthentication( request );
-        UserInfo fcUserInfo = (UserInfo) request.getSession( ).getAttribute( UserDataClient.ATTRIBUTE_USERINFO );
-
+        LuteceUser user = checkUserAuthentication( request );
+        UserInfo fcUserInfo = (UserInfo) request.getSession( ).getAttribute( UserDataClient.ATTRIBUTE_USERINFO );        
+        
+        //Suspicious identity
+        if( CertifierService.existStrictSuspiciousIdentities( new FcIdentity( fcUserInfo ), user.getName( ) ) )
+        {
+            return redirect( request, new UrlItem( URL_SUSPICIOUS_IDENTITY ).getUrl( ) );
+        } 
+        
         ValidationResult result = _certifierService.validate( request, fcUserInfo );
 
         if ( result != ValidationResult.OK )

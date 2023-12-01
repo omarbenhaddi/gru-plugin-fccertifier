@@ -33,4 +33,24 @@
         <constructor-arg ref="mydashboard-identity.identitystore.httpAccessTransport"/>
     </bean>
     
+        <!-- IdentityQuality -->
+	<bean id="fccertifier.identityQualityService" class="fr.paris.lutece.plugins.identityquality.v3.web.service.IdentityQualityService">
+		<constructor-arg ref="fccertifier.identityQualityTransportRest"/>
+	</bean>
+	<bean id="fccertifier.identityQualityTransportRest" class="fr.paris.lutece.plugins.identityquality.v3.web.rs.service.IdentityQualityTransportRest">
+		<constructor-arg ref="fccertifier.identityQualityService.httpTransport"/>
+	</bean>
+    
+    <bean id="fccertifier.identityQualityService.httpTransport" class="fr.paris.lutece.plugins.identityquality.v3.web.rs.service.HttpApiManagerAccessTransport">
+	    <property name="apiEndPointUrl">
+	    	<value>${mydashboard.identity.identitystore.ApiEndPointUrl}</value>
+	    </property>
+	    <property name="accessManagerEndPointUrl">
+	    	<value>${mydashboard.identity.identitystore.AccessManagerEndPointUrl}</value>
+	    </property>
+	    <property name="accessManagerCredentials">
+	    	<value>${mydashboard.identity.identitystore.AccessManagerCredential}</value>
+	    </property>
+    </bean>
+    
 </beans>
