@@ -514,27 +514,11 @@ public class CertifierService implements Serializable
      */
     public static boolean existStrictSuspiciousIdentities( FcIdentity fcIdentity, String strConnectionId )
     {
-        List<String> listAllRules = new ArrayList< >( );
-        List<String> listStrictRules = Arrays.asList( PROPERTY_SUSPICIOUS_LIST_RULE_STRIC.split( ";" ) );
-        listAllRules.addAll( listStrictRules );
-        listAllRules.addAll(  Arrays.asList( PROPERTY_SUSPICIOUS_LIST_RULE_NOT_STRIC.split( ";" )) );
+        DuplicateSearchResponse suspiciousSearchResponse = getSuspiciousIdentitiesAPI( fcIdentity, Arrays.asList( PROPERTY_SUSPICIOUS_LIST_RULE_STRIC.split( ";" ) ) ) ;
         
-        DuplicateSearchResponse suspiciousSearchResponse =  getSuspiciousIdentitiesAPI( fcIdentity, listAllRules ) ;
-        
-        if( suspiciousSearchResponse != null && suspiciousSearchResponse.getStatus( ).getType( ).equals( ResponseStatusType.OK ) &&
-                CollectionUtils.isNotEmpty( suspiciousSearchResponse.getIdentities( ) ) && StringUtils.isNotEmpty( strConnectionId ) )
-        {
-            for( IdentityDto identity : suspiciousSearchResponse.getIdentities( ) )
-            {
-                if( listStrictRules.contains( identity.getDuplicateDefinition( ).getDuplicateSuspicion( ).getDuplicateRuleCode( ) ) 
-                        && (StringUtils.isEmpty( identity.getConnectionId( ) ) || !strConnectionId.equals( identity.getConnectionId( ) )) )
-                {
-                    return true;
-                }
-            }                
-            return false;
-        }
-        return false;
+        return suspiciousSearchResponse != null && suspiciousSearchResponse.getStatus( ) != null 
+                && suspiciousSearchResponse.getStatus( ).getType( ) != null
+                && suspiciousSearchResponse.getStatus( ).getType( ).equals( ResponseStatusType.OK ) &&
+                CollectionUtils.isNotEmpty( suspiciousSearchResponse.getIdentities( ) ) && StringUtils.isNotEmpty( strConnectionId ) ;
     }
-  
 }
