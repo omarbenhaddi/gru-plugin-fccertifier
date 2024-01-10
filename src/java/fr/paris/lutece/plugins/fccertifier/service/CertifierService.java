@@ -514,7 +514,7 @@ public class CertifierService implements Serializable
      */
     public static boolean existStrictSuspiciousIdentities( FcIdentity fcIdentity, String strConnectionId )
     {
-        DuplicateSearchResponse suspiciousSearchResponse = getSuspiciousIdentitiesAPI( fcIdentity, Arrays.asList( PROPERTY_SUSPICIOUS_LIST_RULE_STRIC.split( ";" ) ) ) ;
+        DuplicateSearchResponse suspiciousSearchResponse = getSuspiciousIdentitiesAPI( fcIdentity, Arrays.asList( PROPERTY_SUSPICIOUS_LIST_RULE_NOT_STRIC.split( ";" ) ) ) ;
         
         return suspiciousSearchResponse != null && suspiciousSearchResponse.getStatus( ) != null 
                 && suspiciousSearchResponse.getStatus( ).getType( ) != null
