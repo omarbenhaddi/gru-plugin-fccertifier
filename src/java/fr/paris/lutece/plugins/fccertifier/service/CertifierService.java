@@ -413,7 +413,7 @@ public class CertifierService implements Serializable
      * @param listRules
      * @return DuplicateSearchResponse
      */
-    private static DuplicateSearchResponse getSuspiciousIdentitiesAPI( FcIdentity fcIdentity, List<String> listRules )
+    public static DuplicateSearchResponse getSuspiciousIdentitiesAPI( FcIdentity fcIdentity, List<String> listRules )
     {     
         if( PROPERTY_SUSPICIOUS_IDENTITY_ACTIVATION_INDICATEUR )
         {
@@ -438,25 +438,6 @@ public class CertifierService implements Serializable
             }
         }
         return null;
-    }
-    
-    /**
-     * Gets suspicious identities by filter
-     * @param dashboardIdentity
-     * @param listRules
-     * @return list of suspicious identities
-     */
-    public static List<IdentityDto> getSuspiciousIdentities ( FcIdentity fcIdentity, List<String> listRules )
-    {        
-        DuplicateSearchResponse suspiciousSearchResponse = getSuspiciousIdentitiesAPI( fcIdentity, listRules );
-          
-        if ( suspiciousSearchResponse != null && suspiciousSearchResponse.getStatus( ).getType( ).equals( ResponseStatusType.OK ) &&
-                CollectionUtils.isNotEmpty( suspiciousSearchResponse.getIdentities( ) ) )
-        {
-            return suspiciousSearchResponse.getIdentities( );
-        }
-        
-        return Collections.emptyList();
     }
     
     /**
