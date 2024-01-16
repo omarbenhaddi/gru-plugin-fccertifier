@@ -497,9 +497,17 @@ public class CertifierService implements Serializable
     {
         DuplicateSearchResponse suspiciousSearchResponse = getSuspiciousIdentitiesAPI( fcIdentity, Arrays.asList( PROPERTY_SUSPICIOUS_LIST_RULE_NOT_STRIC.split( ";" ) ) ) ;
         
-        return suspiciousSearchResponse != null && suspiciousSearchResponse.getStatus( ) != null 
-                && suspiciousSearchResponse.getStatus( ).getType( ) != null
-                && suspiciousSearchResponse.getStatus( ).getType( ).equals( ResponseStatusType.OK ) &&
-                CollectionUtils.isNotEmpty( suspiciousSearchResponse.getIdentities( ) ) && StringUtils.isNotEmpty( strConnectionId ) ;
+        if( suspiciousSearchResponse != null && suspiciousSearchResponse.getStatus( ) != null && suspiciousSearchResponse.getStatus( ).getType( ).equals( ResponseStatusType.OK ) &&
+                CollectionUtils.isNotEmpty( suspiciousSearchResponse.getIdentities( ) ) && StringUtils.isNotEmpty( strConnectionId ) )
+        {
+            for( IdentityDto identity : suspiciousSearchResponse.getIdentities( ) )
+            {
+                if( StringUtils.isNotEmpty( identity.getConnectionId( ) ) && !identity.getConnectionId( ).equals( strConnectionId ) )
+                {
+                    return true;
+                }
+            }              
+        }
+        return false;
     }
 }
