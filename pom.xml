@@ -63,6 +63,12 @@
 			<version>[1.0.1-SNAPSHOT,)</version>
 			<type>jar</type>
 		</dependency>
+        <dependency>
+            <artifactId>plugin-verifybackurl</artifactId>
+            <groupId>fr.paris.lutece.plugins</groupId>
+            <version>[1.0.1-SNAPSHOT,)</version>
+            <type>lutece-plugin</type>
+        </dependency>
     </dependencies>
 
     <properties>

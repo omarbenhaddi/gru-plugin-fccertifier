@@ -37,6 +37,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
+
 import fr.paris.lutece.plugins.fccertifier.business.FcIdentity;
 import fr.paris.lutece.plugins.fccertifier.dataclient.UserDataClient;
 import fr.paris.lutece.plugins.fccertifier.service.CertifierService;
@@ -44,6 +46,7 @@ import fr.paris.lutece.plugins.fccertifier.service.CertifierService.ValidationRe
 import fr.paris.lutece.plugins.identitystore.v3.web.rs.dto.common.IdentityDto;
 import fr.paris.lutece.plugins.oauth2.modules.franceconnect.business.UserInfo;
 import fr.paris.lutece.plugins.oauth2.modules.franceconnect.business.service.FranceConnectService;
+import fr.paris.lutece.plugins.verifybackurl.service.AuthorizedUrlService;
 import fr.paris.lutece.portal.service.security.LuteceUser;
 import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.portal.service.security.UserNotSignedException;
@@ -85,7 +88,7 @@ public class FranceConnectCertifierApp extends MVCApplication
     private static final String MARK_FC_INFOS = "fc_infos";
     private static final String MARK_IDENTITY = "identity";
     private static final String MARK_JSP_MYDASHBOARD = "jsp_mydashboard";
-    
+    private static final String MARK_SERVICE_URL = "service_url";    
     //Properties
     private static final String PROPERTY_JSP_MYDASHBOARD = AppPropertiesService.getProperty( "fccertifier.mydashboard.identity.xpage" );
     private static final String PROPERTY_SUSPICIOUS_REDIRECT_PAGE = AppPropertiesService.getProperty( "fccertifier.identity.suspicious.france_connect.redirect.page" );
@@ -210,9 +213,17 @@ public class FranceConnectCertifierApp extends MVCApplication
     @View( VIEW_VALIDATION_OK )
     public XPage validationOK( HttpServletRequest request ) throws UserNotSignedException
     {
+        Map<String,Object> model = getModel( );
         checkUserAuthentication( request );
+        // check back url
+        String strBackUrl = AuthorizedUrlService.getInstance( ).getServiceBackUrl( request );
 
-        return getXPage( TEMPLATE_VALIDATION_OK );
+        if ( !StringUtils.isEmpty( strBackUrl ) )
+        {
+            model.put( MARK_SERVICE_URL, strBackUrl );
+        }
+
+        return getXPage( TEMPLATE_VALIDATION_OK, request.getLocale( ), model );
     }
 
     /**
