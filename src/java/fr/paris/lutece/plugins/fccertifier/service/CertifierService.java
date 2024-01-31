@@ -503,7 +503,7 @@ public class CertifierService implements Serializable
             for( IdentityDto identity : suspiciousSearchResponse.getIdentities( ) )
             {
                 if( StringUtils.isEmpty( identity.getConnectionId( ) ) 
-                        || ( StringUtils.isNotEmpty( identity.getConnectionId( ) ) && !identity.getConnectionId( ).equals( strConnectionId ) ) )
+                        || ( StringUtils.isNotEmpty( identity.getConnectionId( ) ) && !identity.getConnectionId( ).equalsIgnoreCase( strConnectionId ) ) )
                 {
                     return true;
                 }
