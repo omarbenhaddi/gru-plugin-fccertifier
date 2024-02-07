@@ -73,8 +73,8 @@ public class FcIdentity extends UserInfo
         setSub( userInfo.getSub( ) );
 
         _strIdsBirthDate = DateUtils.convertFcToIds( getBirthDate( ) );
-        _strIdsBirthPlace = InseeUtils.getPlaceName( getBirthPlace( ) );
-        _strIdsBirthCountry = InseeUtils.getCountryName( getBirthCountry( ) );
+        _strIdsBirthPlace = InseeUtils.getPlaceName( getBirthPlace( ),_strIdsBirthDate );
+        _strIdsBirthCountry = InseeUtils.getCountryName( getBirthCountry( ), _strIdsBirthDate );
 
     }
 
