@@ -33,17 +33,27 @@
  */
 package fr.paris.lutece.plugins.fccertifier.util;
 
-import fr.paris.lutece.plugins.fccertifier.business.CommunesInseeDAO;
-import fr.paris.lutece.plugins.fccertifier.business.PaysInseeDAO;
+
+import java.util.Date;
+import java.util.Locale;
+
+import org.apache.commons.lang3.StringUtils;
+
+import fr.paris.lutece.plugins.geocode.v1.web.rs.dto.City;
+import fr.paris.lutece.plugins.geocode.v1.web.rs.dto.Country;
+import fr.paris.lutece.plugins.geocode.v1.web.service.GeoCodeService;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.portal.service.util.AppLogService;
+import fr.paris.lutece.util.date.DateUtil;
+
 
 /**
  * InseeUtils
  */
 public final class InseeUtils
 {
-    private static final CommunesInseeDAO DAO_COMMUNES = new CommunesInseeDAO( );
-    private static final PaysInseeDAO DAO_PAYS = new PaysInseeDAO( );
-
+     private static GeoCodeService _geoCodeService = SpringContextService.getBean( "geocodes.geoCodesService" );
+     
     /**
      * Private constructor
      */
@@ -56,11 +66,27 @@ public final class InseeUtils
      * 
      * @param strCode
      *            The INSEE code
+     * @param strBirthdate
+     *            The birthdate
      * @return The name
      */
-    public static String getPlaceName( String strCode )
+    public static String getPlaceName( String strCode, String strBirthdate )
     {
-        return DAO_COMMUNES.findByCode( strCode );
+        Date birthdate = DateUtil.formatDate( strBirthdate, Locale.FRANCE );
+
+        try
+        {
+            City city = _geoCodeService.getCityByCodeAndDate( strCode, birthdate );
+            if ( city != null )
+            {
+                return city.getValue( );
+            }
+        } catch ( Exception e )
+        {
+            AppLogService.error( "Une erreur s'est produite lors de la récupération de la ville de naissance pour le code INSEE {}", strCode, e.getMessage( ) );
+        }
+
+        return StringUtils.EMPTY;
     }
 
     /**
@@ -68,10 +94,26 @@ public final class InseeUtils
      * 
      * @param strCode
      *            The INSEE code
+     * @param strBirthdate
+     *            The birthdate
      * @return The name
      */
-    public static String getCountryName( String strCode )
+    public static String getCountryName( String strCode, String strBirthdate )
     {
-        return DAO_PAYS.findByCode( strCode );
+        Date birthdate = DateUtil.formatDate( strBirthdate, Locale.FRANCE );
+
+        try
+        {
+            Country country = _geoCodeService.getCountryByCodeAndDate( strCode, birthdate );
+            if ( country != null )
+            {
+                return country.getValue( );
+            }
+        } catch ( Exception e )
+        {
+            AppLogService.error( "Une erreur s'est produite lors de la récupération du pays de naissance pour le code INSEE {}", strCode, e.getMessage( ) );
+        }
+
+        return StringUtils.EMPTY;
     }
 }
