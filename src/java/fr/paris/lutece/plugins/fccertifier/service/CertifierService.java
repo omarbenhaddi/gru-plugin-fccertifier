@@ -188,7 +188,7 @@ public class CertifierService implements Serializable
             IdentityChangeRequest identityChangeRequest = new IdentityChangeRequest( );
     
             IdentityDto identity = new IdentityDto( );
-            identity.setCustomerId(identityStore.getConnectionId());
+            identity.setConnectionId(identityStore.getConnectionId());
             identity.setLastUpdateDate(identityStore.getLastUpdateDate());
     
             List<AttributeDto> listCertifiedAttribute = new ArrayList<>();
@@ -222,7 +222,7 @@ public class CertifierService implements Serializable
                 final IdentityChangeResponse response= identityService.updateIdentity( identityStore.getCustomerId(), identityChangeRequest, CLIENT_CODE,author);
                 if (response == null || !ResponseStatusType.OK.equals(response.getStatus().getType())  )
                   {
-                      AppLogService.error( "Error when  updating the identity for connectionId {} the idantity change status is {}, the identity response is {} ", identity.getConnectionId( ), response!=null? response.getStatus():"",printJsonObjectAsString(response));
+                      AppLogService.error( "Error when  updating the identity for connectionId {} the idantity change status is {}, the identity response is {} ", identity.getConnectionId( ), response!=null? response.getStatus().getMessage():"",printJsonObjectAsString(response));
                       
                       throw new IdentityStoreException(response!=null ? response.getStatus().getType().name():"");
                   }
