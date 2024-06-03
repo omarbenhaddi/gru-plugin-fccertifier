@@ -10,7 +10,7 @@
     <groupId>fr.paris.lutece.plugins</groupId>
     <artifactId>plugin-fccertifier</artifactId>
     <packaging>lutece-plugin</packaging>
-    <version>1.0.8</version>
+    <version>1.0.9-SNAPSHOT</version>
     <name>Lutece fccertifier plugin</name>
 
     <repositories>
@@ -87,7 +87,7 @@
         <connection>scm:git:https://github.com/lutece-secteur-public/gru-plugin-fccertifier.git</connection>
         <developerConnection>scm:git:https://github.com/lutece-secteur-public/gru-plugin-fccertifier.git</developerConnection>
         <url>https://github.com/lutece-secteur-public/gru-plugin-fccertifier.git</url>
-      <tag>plugin-fccertifier-1.0.8</tag>
+      <tag>HEAD</tag>
   </scm>
     
 </project>
