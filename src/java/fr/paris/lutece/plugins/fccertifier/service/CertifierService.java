@@ -220,7 +220,7 @@ public class CertifierService implements Serializable
             {   
                 
                 final IdentityChangeResponse response= identityService.updateIdentity( identityStore.getCustomerId(), identityChangeRequest, CLIENT_CODE,author);
-                if (response == null || !ResponseStatusType.OK.equals(response.getStatus().getType())  )
+                if (response == null || (!ResponseStatusType.SUCCESS.equals(response.getStatus().getType()) && !ResponseStatusType.INCOMPLETE_SUCCESS.equals(response.getStatus().getType()))   )
                   {
                       AppLogService.error( "Error when  updating the identity for connectionId {} the idantity change status is {}, the identity response is {} ", identity.getConnectionId( ), response!=null? response.getStatus().getMessage():"",printJsonObjectAsString(response));
                       
