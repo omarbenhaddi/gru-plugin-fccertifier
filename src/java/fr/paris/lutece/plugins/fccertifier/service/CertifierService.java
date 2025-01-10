@@ -50,6 +50,10 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import fr.paris.lutece.plugins.fccertifier.business.FcIdentity;
 import fr.paris.lutece.plugins.identityquality.v3.web.service.IdentityQualityService;
 import fr.paris.lutece.plugins.identitystore.v3.web.rs.dto.common.AttributeDto;
@@ -104,6 +108,12 @@ public class CertifierService implements Serializable
     private static final String CLIENT_CODE = AppPropertiesService.getProperty( PROPERTY_IDENTITY_SERVICE_CLIENT_CODE );
 
     private static Map<String, ValidationInfos> _mapValidationInfos = new ConcurrentHashMap<String, ValidationInfos>( );
+    private static ObjectMapper _mapper;
+    static
+    {
+        _mapper = new ObjectMapper( );
+        _mapper.disable( DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES );
+    }
 
     /**
      * Starts the validation process by generating and sending a validation code
@@ -178,7 +188,7 @@ public class CertifierService implements Serializable
             IdentityChangeRequest identityChangeRequest = new IdentityChangeRequest( );
     
             IdentityDto identity = new IdentityDto( );
-            identity.setCustomerId(identityStore.getConnectionId());
+            identity.setConnectionId(identityStore.getConnectionId());
             identity.setLastUpdateDate(identityStore.getLastUpdateDate());
     
             List<AttributeDto> listCertifiedAttribute = new ArrayList<>();
@@ -210,9 +220,9 @@ public class CertifierService implements Serializable
             {   
                 
                 final IdentityChangeResponse response= identityService.updateIdentity( identityStore.getCustomerId(), identityChangeRequest, CLIENT_CODE,author);
-                if (response == null || !ResponseStatusType.OK.equals(response.getStatus().getType())  )
+                if (response == null || (!ResponseStatusType.SUCCESS.equals(response.getStatus().getType()) && !ResponseStatusType.INCOMPLETE_SUCCESS.equals(response.getStatus().getType()))   )
                   {
-                      AppLogService.error( "Error when  updating the identity for connectionId {} the idantity change status is {} ", identity.getConnectionId( ), response!=null? response.getStatus():"");
+                      AppLogService.error( "Error when  updating the identity for connectionId {} the idantity change status is {}, the identity response is {} ", identity.getConnectionId( ), response!=null? response.getStatus().getMessage():"",printJsonObjectAsString(response));
                       
                       throw new IdentityStoreException(response!=null ? response.getStatus().getType().name():"");
                   }
@@ -511,4 +521,24 @@ public class CertifierService implements Serializable
         }
         return false;
     }
+    
+    /**
+     * Print JsonObject as String
+     * @param o the json Object
+     * @return Json String
+     */
+    public static String printJsonObjectAsString(Object o) 
+    {
+		if (o != null) {
+
+			try {
+				return _mapper.writeValueAsString(o);
+			} catch (JsonProcessingException e) {
+				// TODO Auto-generated catch block
+				AppLogService.error("Failed to write object as Json", e);
+			}
+		}
+    	return "";
+    }
+    
 }
